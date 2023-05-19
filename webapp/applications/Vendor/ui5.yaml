@@ -16,8 +16,8 @@ server:
             - /test-resources
           url: https://ui5.sap.com
         backend:
-          - path: /sap
-            url: http://localhost
+          - path: /deswork
+            destination: deswork
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

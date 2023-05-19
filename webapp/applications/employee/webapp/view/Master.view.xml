@@ -20,7 +20,7 @@
 				mode="SingleSelectMaster"
 				headerText="Leave Application List"
 				itemPress="onListItemPress"
-				items="{memployee>/EmployeeCollection/}"
+				items="{memployee>/}"
 				>
 				<headerToolbar>
 		
@@ -38,7 +38,7 @@
 				</headerToolbar>
 			
 				
-			<ObjectListItem id="_IDGenColumnListItem1" title="{memployee>Name}" type="Navigation" >
+			<ObjectListItem id="_IDGenColumnListItem1" title="{memployee>firstName}" type="Navigation" >
 			<firstStatus >
 			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{memployee>noofproject}" /> 
 		    </firstStatus>

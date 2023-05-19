@@ -9,7 +9,7 @@ sap.ui.define([
 
 	return Controller.extend("vaspp.Leave.controller.Master", {
 		onInit: function () {
-			
+			var that = this;
 			// TO REMOVE THE AUTO SELECTION FROM THE LIST
 			this.oRouter = this.getOwnerComponent().getRouter();
 			
@@ -18,15 +18,25 @@ sap.ui.define([
                 
              }, this);
 			this._bDescendingSort = false;
+
+			$.get("/deswork/api/p-leaves?populate=*",function(response){
+				response = JSON.parse(response);
+				var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getView().setModel(oModel, "mleave");
+			}) 
 		},
 		
 		onListItemPress: function (oEvent) {
-			var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
-				productPath = oEvent.getSource().getSelectedItem().getBindingContext("mleave").getPath(),
-				product = productPath.split("/").slice(-1).pop();
+			// var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
+			// 	productPath = oEvent.getSource().getSelectedItem().getBindingContext("mleave").getPath(),
+			// 	product = productPath.split("/").slice(-1).pop();
 				
 
-			this.oRouter.navTo("detail", {layout: oNextUIState.layout, product: product});
+			// this.oRouter.navTo("detail", {layout: oNextUIState.layout, product: product});
+			var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
+				leaveID = oEvent.getSource().getSelectedItem().getBindingContext("mleave").getObject().id;
+			this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: leaveID });
+			this.getView().getModel("mleave").updateBindings(true);
 			
 		},
 		//SEARCH
@@ -35,7 +45,7 @@ sap.ui.define([
 				sQuery = oEvent.getParameter("query");
 
 			if (sQuery && sQuery.length > 0) {
-				oTableSearchState = [new Filter("Name", FilterOperator.Contains, sQuery)];
+				oTableSearchState = [new Filter("attributes/users_permissions_user/data/0/attributes/firstName", FilterOperator.Contains, sQuery)];
 			}
 
 			this.getView().byId("productsTable").getBinding("items").filter(oTableSearchState, "Application");
@@ -47,7 +57,7 @@ sap.ui.define([
 			var oView = this.getView(),
 				oTable = oView.byId("productsTable"),
 				oBinding = oTable.getBinding("items"),
-				oSorter = new Sorter("Name", this._bDescendingSort);
+				oSorter = new Sorter("attributes/users_permissions_user/data/id", this._bDescendingSort);
 
 			oBinding.sort(oSorter);
 		}

@@ -77,7 +77,7 @@ sap.ui.define([
 
 			launchView.userFragment.getContent()[0].getItems()[0].getItems()[1].setValue(userData.email);
 			launchView.userFragment.getContent()[0].getItems()[0].getItems()[3].setValue(userData.password);
-
+			debugger
 			launchView.userDetailsFragment.close();
 			launchView.userFragment.open();
 		},
@@ -167,9 +167,9 @@ sap.ui.define([
 							// 	that.getView().byId("bellButtonId").setVisible(true);
 							// }
 							if (userDet.designation == "Admin") {
+								
 
-
-
+								
 							} else {
 								that.getView().removeStyleClass("coverImage");
 								that.LoginFragment.getContent()[0].getItems()[2].getItems()[1].setValue("");
@@ -191,17 +191,6 @@ sap.ui.define([
 								if (that.userDetailsFragment) {
 									that.userDetailsFragment.setModel(loggedOnUserModel);
 								}
-								var appComponentContainer;
-								appComponentContainer = new ComponentContainer({
-									height: "100%",
-									name: "vaspp.ProjectStatisticalReport",
-									propagateModel: true
-								});
-								var aMainContents = that.byId("app").getMainContents();
-								if (aMainContents.length === 2)
-									that.byId("app").removeMainContent(1);
-								aMainContents[0].setVisible(false);
-								that.byId("app").addMainContent(appComponentContainer);
 								// if(userDet.mrole.roleName !== "Super Admin"){
 								// that.filterModelsonOrgID(userDet.m_organisation.orgID);
 								// }
@@ -393,9 +382,9 @@ sap.ui.define([
 					if (sideBarMenuData[itemIndex].items.length) {
 						for (var subItemIndex = 0; subItemIndex < sideBarMenuData[itemIndex].items.length; subItemIndex++) {
 							if (sideBarMenuData[itemIndex].items[subItemIndex].id === permissionData[appIndex].applicationid || sideBarMenuData[
-								itemIndex]
+									itemIndex]
 								.items[
-								subItemIndex].title === permittedAppName) {
+									subItemIndex].title === permittedAppName) {
 								sideBarMenuData[itemIndex].items[subItemIndex].permissions.create = permissionData[appIndex].create === "true" ||
 									permissionData[appIndex].create === true;
 								sideBarMenuData[itemIndex].items[subItemIndex].permissions.read = permissionData[appIndex].read === "true" ||
@@ -491,7 +480,7 @@ sap.ui.define([
 						console.error("The menu item \"" + selectedItem.getText() + "\" has no target. Component name is missing.");
 						if (!that.byId("app").getSideExpanded()) {
 							that.byId("app").setSideExpanded(true);
-							//	that.byId("sideNavigationToggleButton").setTooltip(that.oResourceBundle.getText("collapseMenu"));
+						//	that.byId("sideNavigationToggleButton").setTooltip(that.oResourceBundle.getText("collapseMenu"));
 						}
 						return;
 					} else {
@@ -552,7 +541,7 @@ sap.ui.define([
 		goToHomePage: function () {
 			if (!this.byId("app").getSideExpanded()) {
 				this.byId("app").setSideExpanded(true);
-			//	this.byId("sideNavigationToggleButton").setTooltip(this.oResourceBundle.getText("collapseMenu"));
+				this.byId("sideNavigationToggleButton").setTooltip(this.oResourceBundle.getText("collapseMenu"));
 			}
 			if (this.byId("sideBarMenu").getItem().getItems().length) {
 				this.byId("sideBarMenu").setSelectedItem(this.byId("sideBarMenu").getItem().getItems()[0]);
@@ -585,7 +574,7 @@ sap.ui.define([
 			}
 		},
 
-
+		
 		onItemSelect: function (oEvent) {
 			var oItem = oEvent.getParameter('item');
 			var sKey = oItem.getKey();

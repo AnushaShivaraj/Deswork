@@ -21,7 +21,7 @@
 				mode="SingleSelectMaster"
 				headerText="Leave Application List"
 				itemPress="onListItemPress"
-				items="{mleave>/details/}"
+				items="{mleave>/}"
 				>
 				<headerToolbar>
 		
@@ -36,19 +36,20 @@
 					
 				</headerToolbar>
 				
-					<ObjectListItem id="_IDGenColumnListItem1" title="{mleave>Name}" type="Navigation" >
+					<ObjectListItem id="_IDGenColumnListItem1" title="{mleave>/attributes/users_permissions_user/data/0/attributes/firstName}" type="Navigation" >
 			
 			
 		
 		<firstStatus >
+		<!-- attributes/name -->
 		<ObjectStatus id="_IDGenObjectStatus2"  title="Applied On "
 				text="{mleave>appliedOn}"
 				 />
 				</firstStatus>
 			
-						<ObjectAttribute id="_IDGenObjectAttribute1" title="From "   text="{mleave>startDate}" />
-			<ObjectAttribute id="_IDGenObjectAttribute2" title="To " text="{mleave>endDate}" />
-			<ObjectAttribute id="_IDGenObjectAttribute3" text="{mleave>leaveType}" />
+						<ObjectAttribute id="_IDGenObjectAttribute1" title="From "   text="{mleave>attributes/startDate}" />
+			<ObjectAttribute id="_IDGenObjectAttribute2" title="To " text="{mleave>attributes/endDate}" />
+			<ObjectAttribute id="_IDGenObjectAttribute3" text="{mleave>attributes/type}" />
 					</ObjectListItem>
 			
 			

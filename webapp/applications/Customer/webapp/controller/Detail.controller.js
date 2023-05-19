@@ -14,7 +14,7 @@ sap.ui.define([
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this.oModel = this.getOwnerComponent().getModel();
 
-			this.oRouter.getRoute("detail").attachPatternMatched(this._onProductMatched, this);
+			this.oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
 			
 
 			[oExitButton, oEnterButton].forEach(function (oButton) {
@@ -33,12 +33,12 @@ sap.ui.define([
 		handleFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
-			this.oRouter.navTo("detail", { layout: sNextLayout, product: this._product });
+			this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
 		},
 		handleExitFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/exitFullScreen");
-			this.oRouter.navTo("detail", { layout: sNextLayout, product: this._product });
+			this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
 		},
 		handleClose: function () {
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/closeColumn");
@@ -46,54 +46,108 @@ sap.ui.define([
 		},
 		
 
-		_onProductMatched: function (oEvent) {
-			
-			
-			this._product = oEvent.getParameter("arguments").product || this._product || "0";
-			this.getView().bindElement({
-				path: "/CustomerCollection/" + this._product,
-				model: "mcustomer"
+		_onObjectMatched: function (oEvent) {
+			var that = this;
+			this.id = oEvent.getParameter("arguments").product
+			var options = {};
+			$.get('/deswork/api/p-customers/' + this.id + '?populate[0]=p_projects', options, function (response) {
+				console.log(response);
+				response = JSON.parse(response);
+				var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getView().setModel(oModel, "mcustomer");
+				
 			});
-			//attachment
-			var attachmentModel = new sap.ui.model.json.JSONModel(this.getView().mElementBindingContexts.mcustomer.getObject().documents);
-			this.getView().setModel(attachmentModel,"attachmentModel");
-			this.getView().getModel("attachmentModel").updateBindings(true);
+			
+			// this._product = oEvent.getParameter("arguments").product || this._product || "0";
+			// this.getView().bindElement({
+			// 	path: "/CustomerCollection/" + this._product,
+			// 	model: "mcustomer"
+			// });
+			// //attachment
+			// var attachmentModel = new sap.ui.model.json.JSONModel(this.getView().mElementBindingContexts.mcustomer.getObject().documents);
+			// this.getView().setModel(attachmentModel,"attachmentModel");
+			// this.getView().getModel("attachmentModel").updateBindings(true);
 		},
 //EDIT THE CUSTOMER DETAILS
 		onEdit: function () {
 			var that = this;
+			
+			var sendVendordetails = new sap.ui.model.json.JSONModel(this.getView().getModel("mcustomer").getData());
+			this.getOwnerComponent().setModel(sendVendordetails, "custUpdateDetails");
+			// this.getView().getModel("appView").setProperty("/layout", "MidColumnFullScreen");
+			// this.getOwnerComponent().getRouter().navTo("AddNewCustomer", {
+			// 	AddCust: "Edit"
+			// });
 			this.getView().getModel().setProperty("/layout", "OneColumn");
 
 			var sNextLayout = this.getView().getModel().getProperty("/actionButtonsInfo/midColumn/closeColumn");
 			if(sNextLayout == null)
 			sNextLayout = "OneColumn"
-			this.getOwnerComponent().getRouter().navTo("AddNewCustomer", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this._product });
+			this.getOwnerComponent().getRouter().navTo("AddNewCustomer", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this.id });
+
+
+
+
+
+			//var that = this;
+			//this.getView().getModel().setProperty("/layout", "OneColumn");
+
+			//var sNextLayout = this.getView().getModel().getProperty("/actionButtonsInfo/midColumn/closeColumn");
+			//if(sNextLayout == null)
+			//sNextLayout = "OneColumn"
+			//this.getOwnerComponent().getRouter().navTo("AddNewCustomer", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this.id });
 		},
 //DELETE THE CUSTOMER DETAILS
 		onDetailPageDelete: function (evt) {
-			var that = this;
+			// var that = this;
 			
-			var oItems = evt.getSource().getBindingContext("mcustomer").getObject().customerName;
-			var oData = that.getView().getModel("mcustomer").getData().CustomerCollection;
+			// var oItems = evt.getSource().getBindingContext("mcustomer").getObject().customerName;
+			// var oData = that.getView().getModel("mcustomer").getData().CustomerCollection;
+			// MessageBox.confirm("Are you sure you want to Delete  ?", {
+			// 	actions: ["Yes", "No"],
+			// 	emphasizedAction: "Yes",
+			// 	onClose: function (oEvent) {
+			// 		if (oEvent == "Yes") {
+            //        for (var i = 0; i < oData.length; i++) {
+			// 				var products = oData[i];
+											
+			// 				if (products.customerName === oItems) {
+			// 					that.getView().getModel("mcustomer").getData().CustomerCollection.splice(i, 1)
+								
+			// 				}
+			// 			}
+			// 			that.getView().getModel("mcustomer").updateBindings(true);
+			// 			MessageBox.success("Customer details has been deleted");
+			// 			//NAVIGATE TO MASTER			
+			// 			var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+			// 			oRouter.navTo("master");
+
+			// 		}
+			// 	}
+			// }
+			// );
+			var that = this;
 			MessageBox.confirm("Are you sure you want to Delete  ?", {
 				actions: ["Yes", "No"],
 				emphasizedAction: "Yes",
-				onClose: function (oEvent) {
-					if (oEvent == "Yes") {
-                   for (var i = 0; i < oData.length; i++) {
-							var products = oData[i];
-											
-							if (products.customerName === oItems) {
-								that.getView().getModel("mcustomer").getData().CustomerCollection.splice(i, 1)
-								
+				onClose: function (evt) {
+					if (evt == "Yes") {
+						$.ajax({
+							type: "DELETE",
+							url: "/deswork/api/p-customers/" + that.id,
+							success: function (response) {
+								var resv = JSON.parse(response);
+								console.log(resv)
+								if (resv.error) {
+									MessageBox.error(resv.error.message)
+								}
+								else {
+									MessageBox.success("Customer has been deleted");
+									that.getView().getModel("mcustomer").updateBindings(true);
+								}
 							}
-						}
-						that.getView().getModel("mcustomer").updateBindings(true);
-						MessageBox.success("Customer details has been deleted");
-						//NAVIGATE TO MASTER			
-						var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-						oRouter.navTo("master");
 
+						})
 					}
 				}
 			}

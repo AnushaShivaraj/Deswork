@@ -21,7 +21,7 @@ sap.ui.define([
 				oEnterButton = this.getView().byId("enterFullScreenBtn");
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this.oModel = this.getOwnerComponent().getModel();
-			this.oRouter.getRoute("detail").attachPatternMatched(this._onProductMatched, this);
+			this.oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
 			[oExitButton, oEnterButton].forEach(function (oButton) {
 				oButton.addEventDelegate({
 					onAfterRendering: function () {
@@ -38,13 +38,13 @@ sap.ui.define([
 		handleFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
-			this.oRouter.navTo("detail", {layout: sNextLayout, product: this._product});
+			this.oRouter.navTo("detail", {layout: sNextLayout, product: this.id});
 		},
 		//EXIT FULL SCREEN
 		handleExitFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/exitFullScreen");
-			this.oRouter.navTo("detail", {layout: sNextLayout, product: this._product});
+			this.oRouter.navTo("detail", {layout: sNextLayout, product: this.id});
 		},
 		//CLOSE THE DETAIL
 		handleClose: function () {
@@ -52,11 +52,22 @@ sap.ui.define([
 			this.oRouter.navTo("master", {layout: sNextLayout});
 		},
 
-		_onProductMatched: function (oEvent) {
-			this._product = oEvent.getParameter("arguments").product || this._product || "0";
-			this.getView().bindElement({
-				path: "/details/" + this._product,
-				model: "mleave"
+		_onObjectMatched: function (oEvent) {
+			// this._product = oEvent.getParameter("arguments").product || this._product || "0";
+			// this.getView().bindElement({
+			// 	path: "/details/" + this._product,
+			// 	model: "mleave"
+			// });
+
+			var that = this;
+			this.id = oEvent.getParameter("arguments").product
+			var options = {};
+			$.get('/deswork/api/p-leaves/' + this.id + '?populate[0]=users_permissions_user', options, function (response) {
+				console.log(response);
+				response = JSON.parse(response);
+				var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getView().setModel(oModel, "mleave");
+				
 			});
 			
 		},

@@ -4,7 +4,7 @@
 		xmlns:m="sap.m"
 		xmlns:f="sap.f"
 		xmlns:form="sap.ui.layout.form"
-		
+		xmlns:core="sap.ui.core"
 		xmlns:upload="sap.m.upload"
 	class="viewPadding">
 
@@ -21,14 +21,14 @@
 				<headerTitle>
 					<ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
 						<expandedHeading>
-							<m:Title id="_IDGenTitle1" text="{mvendor>id}" wrapping="true" class="sapUiSmallMarginEnd"/>
+							<m:Title id="_IDGenTitle1" text="{mvendor>/attributes/name}" wrapping="true" class="sapUiSmallMarginEnd"/>
 						</expandedHeading>
 
 						<snappedHeading>
 							<m:FlexBox id="_IDGenFlexBox1" wrap="Wrap" fitContainer="true" alignItems="Center">
 								<m:FlexBox id="_IDGenFlexBox2" wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
 									
-									<m:Title id="_IDGenTitle2" text="{mvendor>orgid}" wrapping="true" class="sapUiTinyMarginEnd"/>
+									<m:Title id="_IDGenTitle2" text="{mvendor>/id}" wrapping="true" class="sapUiTinyMarginEnd"/>
 								</m:FlexBox>
 							</m:FlexBox>
 						</snappedHeading>
@@ -44,33 +44,19 @@
 				</headerTitle>
 
 				<headerContent>
-					<m:FlexBox id="_IDGenFlexBox10" wrap="Wrap" fitContainer="true"
-				alignItems="Start" justifyContent="Start">
-                           <m:VBox id="_IDGenVBox10"  class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
-						    <m:HBox id="_IDGenHBox11" class="sapUiTinyMarginEnd" >
-                            <m:Label id="_IDGenLa1bel1" text=""/>
-                            <m:Text id="_IDGenText01" text="{mvendor>VendorName}"/>
-                            </m:HBox>
-							<m:HBox id="_IDGenHBox1144" class="sapUiTinyMarginEnd" >
-                            <m:Label id="_IDGenLa1bel14" text=""/>
-                            <m:Text id="_IDGenText041" text="{mvendor>email}"/>
-                            </m:HBox>
-					    </m:VBox>
-					<m:VBox  wrap="Wrap" fitContainer="true"  alignItems="Start" justifyContent="Start" id="_IDGenVBox11" class="sapUiSmallMarginEnd ">	
-						<m:HBox justifyContent="End" id="_IDGenVBox5" width="740px" class="sapUiSmallMarginEnd">
-							<m:Label id="_IDGenLabel7" text="Country:" />
-							<m:Text id="_IDGenText7" text="{mvendor>country}"/>
-							</m:HBox>
-							<m:HBox justifyContent="End" id="_IDGenVBox8" width="740px" class="sapUiSmallMarginEnd" >
-							<m:Label id="_IDGenLabel67" text="City : "/>
-							<m:Text id="_IDGenText67" text="{mvendor>city}"/>
-						</m:HBox>
-							 <m:HBox justifyContent="End" id="_IDGenVBox4" width="740px" class="sapUiSmallMarginEnd" >
-							<m:Label id="_IDGenLabel8" text="Contact no. : "/>
-							<m:Text id="_IDGenText8" text="{mvendor>contact}"/>
-						</m:HBox> 
-                        </m:VBox>
-                    </m:FlexBox>
+				
+					
+					 <m:ObjectHeader id="_IDGenObjectHeader1" class="objHeaderClass" title="{mvendor>/id}">
+                <m:statuses>
+                    <m:ObjectStatus id="_IDGenObjectStatus1" title="Country" text="{mvendor>/attributes/country}"  />
+                    <m:ObjectStatus id="_IDGenObj1ectStatus1" title="Region" text="{mvendor>/attributes/region}" />
+                    
+                </m:statuses>
+                <m:attributes>
+                    <m:ObjectAttribute id="_IDGenObjectAttribute1" title="Phone" text="{mvendor>/attributes/phone}" visible="true" />
+                    <m:ObjectAttribute id="_IDGenObjectAttribute2" title="Email" text="{mvendor>/attributes/email}" visible="true" />
+                </m:attributes>
+            </m:ObjectHeader>
 				</headerContent>
 
 		<sections>
@@ -79,24 +65,36 @@
 				<subSections>
 					<ObjectPageSubSection id="_IDGenObjectPageSubSection1">
 						<blocks>
-							<form:SimpleForm id="simpleFormInfoTab" title="" editable="false" class="editableForm sapUiSmallMarginTopBottom">
-							<form:content>	
-                         <m:Label id="_IDGenLabel121" text="Name "/>
-                            <m:Text id="_IDGenText211" text="{mvendor>VendorName}"/>
-							
-							<m:Label id="_IDGenLabel127" text="Telephone " />
-							<m:Text id="_IDGenText127" text="{mvendor>contact}"/>
-				                <m:Label id="_IDGenLabel1367" text="Email " />
-							<m:Text id="_IDGenText1637" text="{mvendor>email}"/>
-						<m:Label id="_IDGenLabel4137" text="Country " />
-							<m:Text id="_IDGenText1347" text="{mvendor>country}"/>
-							
-							<m:Label id="_IDGenLabel4172" text="Contact Person Name " />
-							<m:Text id="_IDGenText1473" text="{mvendor>contactPerson}"/>
-							<m:Label id="_IDGenLabel41467" text="Contact Person Mobile " />
-							<m:Text id="_IDGenText441647" text="{mvendor>contactPhone}"/>
-							<m:Label id="_IDGenLabel14647" text="Contact Person Email " />
-							<m:Text id="_IDGenText16457" text="{mvendor>contactEmail}"/>
+							<form:SimpleForm id="_IDGenSimpleForm1" editable="false" layout="ResponsiveGridLayout" title="" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4"
+											adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+											singleContainerFullSize="false" visible="true" class="removeTitle">
+											<form:content>
+												<core:Title id="_IDGenTitle3" text="Vendor Details"/>
+                        
+							 
+                                         <m:Label id="_IDGenLabel121" text="Name  " />
+                                        <m:Text id="_IDGenText211" text="{mvendor>/attributes/name}" />
+										<m:Label id="idlabelcus" text="Description  " />
+                                        <m:Text id="idtextcus" text="{mvendor>/attributes/description}" />
+                                        <m:Label id="_IDGenLabel127" text="Telephone " />
+                                        <m:Text id="_IDGenText127" text="{mvendor>/attributes/phone}" />
+                                         <m:Label id="_IDGenLabel1367" text="Email " />
+                                        <m:Text id="_IDGenText1637" text="{mvendor>/attributes/email}" />
+                                        <m:Label id="_IDGenLabel4137" text="Country " />
+                                        <m:Text id="_IDGenText1347" text="{mvendor>/attributes/country}" />
+                   		<core:Title id="_IDGenTitle4" text="Contact Person Detail"/>
+                                        <m:Label id="_IDGenLabel4172" text="Contact Person First Name " />
+                                        <m:Text id="_IDGenText1473" text="{mvendor>/attributes/cpFirstName}"  />
+                                         <m:Label id="_IDG72" text="Contact Person Middle Name " />
+                                        <m:Text id="_3" text="{mvendor>/attributes/cpMiddleName}"  />
+                                         <m:Label id="_abel4172" text="Contact Person Last Name " />
+                                        <m:Text id="_IDGnText1473" text="{mvendor>/attributes/cpLastName}"  />
+                                        <m:Label id="_IDGenLabe172" text="Contact Person designation" />
+                                        <m:Text id="_IDGenTe3" text="{mvendor>/attributes/cpDesignation}"  />
+                                        <m:Label id="_IDGenLabel41467" text="Contact Person Mobile " />
+                                        <m:Text id="_IDGenText441647" text="{mvendor>/attributes/cpPhone}"   />
+                                        <m:Label id="_IDGenLabel14647" text="Contact Person Email " />
+                                        <m:Text id="_IDGenText16457" text="{mvendor>/attributes/cpEmail}"  />
                              </form:content>
 							</form:SimpleForm>
 						</blocks>
@@ -112,16 +110,15 @@
 							<form:SimpleForm id="_IDGenSimpleForm11" title="" editable="false" class="editableForm sapUiSmallMarginTopBottom">
 									
 						<form:content>
-							<m:Label id="_IDGenLabel167" text="Country" />
-							<m:Text id="_IDGenText167" text="{mvendor>country}"/>
-						<m:Label id="_IDGenLabel17" text="City " />
-							<m:Text id="_IDGenText17" text="{mvendor>city}"/>
-						<m:Label id="_IDGenLabel417" text="Region 1 " />
-							<m:Text id="_IDGenText147" text="{mvendor>region1}"/>
-                            <m:Label id="_IDGenLabel11" text="Address  "/>
-                            <m:Text id="_IDGenText11" text="{mvendor>address}"/>
-							<m:Label id="_IDGenLabel1467" text="ZipCode " />
-							<m:Text id="_IDGenText1647" text="{mvendor>zipCode}"/>
+							
+							<m:Label id="_IDGenLabel167" text="Country " />
+                                        <m:Text id="_IDGenText167" text="{mvendor>/attributes/country}" />
+                                        <m:Label id="_IDGenLabel17" text="Region " />
+                                        <m:Text id="_IDGenText17" text="{mvendor>/attributes/region}" />
+                                        <m:Label id="_IDGenLabel417" text="Address " />
+                                        <m:Text id="_IDGenText147" text="{mvendor>/attributes/address}" />
+                                        <m:Label id="_IDGenLabel1467" text="ZipCode" />
+                                        <m:Text id="_IDGenText1647" text="{mvendor>/attributes/zipcode}" />
 							</form:content>
 						
 							</form:SimpleForm>
@@ -137,8 +134,11 @@
 					<ObjectPageSubSection id="_IDGenObjectPageSubSection21" >
 						<blocks>
 
-							<m:Table id="_IDGenTable1" mode="SingleSelectMaster" itemPress="handleItemPress"  items="{mvendor>Projects}">
+							<m:Table id="_IDGenTable1" mode="SingleSelectMaster" itemPress="handleItemPress"  items="{mvendor>/attributes/p_projects/data}">
 						<m:columns>
+						<m:Column id="idcolemn">
+                        <m:Text id="customeridtext" text="Project ID" />
+                        </m:Column>
 						 <m:Column id="_IDGenColumn1">
 						 <m:Text id="cdbh" text="ProjectName" ></m:Text>
 						 </m:Column>
@@ -157,12 +157,13 @@
 						</m:columns>
 					<m:items>
 					<m:ColumnListItem id="_IDGenColumnListItem1"  >
+					                    <m:ObjectIdentifier id="_IDGenObject10" text="{mvendor>id}" />
+                                        <m:ObjectIdentifier id="_IDGenObjectIdentifier1" text="{mvendor>attributes/name}" />
+                                        <m:ObjectIdentifier id="_IDGenObjectIdentifier11" text="{mvendor>attributes/description}" />
+                                        <m:ObjectIdentifier id="_IDGenObjectIdentifier21" text="{mvendor>attributes/startDate}" />
+                                        <m:ObjectIdentifier id="_IDGenObjectIdentifier31" text="{mvendor>attributes/estimatedEndDate}" />
+                                        <m:ObjectIdentifier id="_IDGenObjectIdentifier14" text="{mvendor>attributes/status}" />
 					
-					<m:ObjectIdentifier id="_IDGenObjectIdentifier1" text="{mvendor>ProjectName}" ></m:ObjectIdentifier>
-					<m:ObjectIdentifier id="_IDGenObjectIdentifier11" text="{mvendor>Description}" ></m:ObjectIdentifier>
-					<m:ObjectIdentifier id="_IDGenObjectIdentifier21" text="{mvendor>startdate}" ></m:ObjectIdentifier>
-					<m:ObjectIdentifier id="_IDGenObjectIdentifier31" text="{mvendor>enddate}" ></m:ObjectIdentifier>
-					<m:ObjectIdentifier id="_IDGenObjectIdentifier14" text="{mvendor>Status}" ></m:ObjectIdentifier>
 					
 					</m:ColumnListItem>
 					</m:items>
@@ -199,7 +200,7 @@
 			</ObjectPageSection>
 				
       </sections>
-     <!--Accept and reject buttons for leave request-->
+     
 		<footer>
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer1"/>

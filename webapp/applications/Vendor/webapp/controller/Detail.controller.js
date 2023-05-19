@@ -17,11 +17,8 @@ sap.ui.define([
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this.oModel = this.getOwnerComponent().getModel();
 
-			this.oRouter.getRoute("detail").attachPatternMatched(this._onProductMatched, this);
-			//this.oRouter.getRoute("detailDetail").attachPatternMatched(this._onProductMatched, this);
-			//from here
+			this.oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
 			
-			//till here
 			[oExitButton, oEnterButton].forEach(function (oButton) {
 				oButton.addEventDelegate({
 					onAfterRendering: function () {
@@ -34,23 +31,16 @@ sap.ui.define([
 			}, this);
 			
 		},
-		// handleItemPress: function (oEvent) {
-		// 	var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(2),
-		// 		supplierPath = oEvent.getSource().getSelectedItem().getBindingContext("mvendor").getPath(),
-		// 		supplier = supplierPath.split("/").slice(-1).pop();
-
-		// 	this.oRouter.navTo("detailDetail", {layout: oNextUIState.layout,
-		// 		product: this._product, supplier: supplier});
-		// },
+		
 		handleFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
-			this.oRouter.navTo("detail", {layout: sNextLayout, product: this._product});
+			this.oRouter.navTo("detail", {layout: sNextLayout, product: this.id});
 		},
 		handleExitFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/exitFullScreen");
-			this.oRouter.navTo("detail", {layout: sNextLayout, product: this._product});
+			this.oRouter.navTo("detail", {layout: sNextLayout, product: this.id});
 		},
 		handleClose: function () {
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/closeColumn");
@@ -59,50 +49,59 @@ sap.ui.define([
 		//EDIT VENDOR DETAILS
 		onEdit :  function () {
 			var that = this;
+			var sendVendordetails = new sap.ui.model.json.JSONModel(this.getView().getModel("mvendor").getData());
+			this.getOwnerComponent().setModel(sendVendordetails, "mvendorupdated");
 			this.getView().getModel().setProperty("/layout", "OneColumn");
 
 			var sNextLayout = this.getView().getModel().getProperty("/actionButtonsInfo/midColumn/closeColumn");
 			if(sNextLayout == null)
 			sNextLayout = "OneColumn"
-			this.getOwnerComponent().getRouter().navTo("AddNewVendor", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this._product });
+			this.getOwnerComponent().getRouter().navTo("AddNewVendor", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this.id });
 		},
-		_onProductMatched: function (oEvent) {
-			this._product = oEvent.getParameter("arguments").product || this._product || "0";
-			this.getView().bindElement({
-				path: "/VendorCollection/" + this._product,
-				model: "mvendor"
+		_onObjectMatched: function (oEvent) {
+			var that = this;
+			this.id = oEvent.getParameter("arguments").product
+			var options = {};
+			$.get('/deswork/api/p-vendors/' + this.id + '?populate[0]=p_projects', options, function (response) {
+				console.log(response);
+				response = JSON.parse(response);
+				var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getView().setModel(oModel, "mvendor");
+				
 			});
-			var attachmentModel = new sap.ui.model.json.JSONModel(this.getView().mElementBindingContexts.mvendor.getObject().documents);
-			this.getView().setModel(attachmentModel,"attachmentModel");
-			this.getView().getModel("attachmentModel").updateBindings(true);
+			
 		},
 // DELETE THE VENDOR DETAILS
 		onDetailPageDelete: function (evt) {
-			var that=this;
-			var oItems = evt.getSource().getBindingContext("mvendor").getObject().id;
-			var oData = that.getView().getModel("mvendor").getData().VendorCollection;
-						MessageBox.confirm("Are you sure you want to Delete  ?", {
-						actions: ["Yes", "No"],
-						emphasizedAction: "Yes",
-						onClose: function (oEvent) { 
-							if (oEvent == "Yes"){
-                        
-								for(var i = 0; i < oData.length; i++){				
-									var products = oData[i];
-									//check here				
-									if(products.id=== oItems){
-										that.getView().getModel("mvendor").getData().VendorCollection.splice(i,1)
-									}
-								}				
-								that.getView().getModel("mvendor").updateBindings(true);
-								MessageBox.success("Vendor details has been deleted");	
-								//NAVIGATE TO MASTER			
-                                var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-                                oRouter.navTo("master");				
+			
+			var that = this;
+			MessageBox.confirm("Are you sure you want to Delete  ?", {
+				actions: ["Yes", "No"],
+				emphasizedAction: "Yes",
+				onClose: function (evt) {
+					if (evt == "Yes") {
+						$.ajax({
+							type: "DELETE",
+							url: "/deswork/api/p-vendors/" + that.id,
+							success: function (response) {
+								var resv = JSON.parse(response);
+								console.log(resv)
+								if (resv.error) {
+									MessageBox.error(resv.error.message)
+								}
+								else {
+									MessageBox.success("Vendor has been deleted");
+									// that.getView().getModel("mvendor").updateBindings(true);
+									// that.getView().getModel("mvendor").refresh();
+									that.getOwnerComponent().getModel("mvendor").updateBindings(true);
+								}
 							}
-						}
-					  }	
-		    	);		
+
+						})
+					}
+				}
+			}
+			);		
 		},
 		//Attachment
 		onChange: function (oEvent) {
@@ -123,22 +122,7 @@ sap.ui.define([
 
 
 		onFileDeleted: function (evt) {
-			// var that=this;
-			// that.id = evt.getParameter("arguments").id;
-			// var vendorModel = that.getOwnerComponent().getModel("mvendor");
-			// var vendorData = vendorModel.getData();
-			// for (var c=0; c<vendorData.length; c++){
-			// 	if(vendorData[c].id === that.id){
-			// 		that.path = c;
-			// 		break;
-			// 	}
-			// }
 			
-			// this.getView().getModel("appView").oData.RequestIdSelected = this.path;
-			// var oContext = new Context(this.getOwnerComponent().getModel(), "/" + that.path);
-			// // that.getView().setModel(new sap.ui.model.json.JSONModel(oContext.getObject()));
-			// this.getView().setBindingContext(oContext);
-			// this.getOwnerComponent().getModel("mvendor").getData()[this.path].documents;
 			var that=this;
 			var oItems = evt.getSource().getBindingContext("mvendor").getObject().documents;
 			var oData = that.getView().getModel("mvendor").getData().VendorCollection;
@@ -167,18 +151,7 @@ sap.ui.define([
 						if (oAction === "OK") {
 							that.getView().setBusy(true);
 							oModel.getData().attachments.splice(index, 1);
-							// $.post("/ehs/saveAttachments", {
-							// 	attachments: oModel.getData().attachments,
-							// 	assmnt_id: that.assessmentId
-							// }, function (data) {
-							// 	that.getView().setBusy(false);
-							// 	if (data == "Ok") {
-							// 		oModel.updateBindings(true);
-							// 		MessageToast.show(sap.ui.getCore().getModel("i18nModel").getProperty("savedSuccessfully"));
-							// 	} else {
-							// 		MessageToast.show(sap.ui.getCore().getModel("i18nModel").getProperty("errorSaving"));
-							// 	}
-							// });
+							
 						}
 					}
 				});

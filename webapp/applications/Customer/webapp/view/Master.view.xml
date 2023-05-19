@@ -36,15 +36,14 @@
 				</headerToolbar>
 			
 				
-					<ObjectListItem id="_IDGenColumnListItem1" title="{mcustomer>attributes/customer_information/data/attributes/customerInformation_name}" type="Navigation" >
+					<ObjectListItem id="_IDGenColumnListItem1" title="{mcustomer>attributes/name}" type="Navigation" >
 			<firstStatus >
 			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{mcustomer>noofproject}"
 				 />
 				 
 		    </firstStatus>
 			<ObjectAttribute id="_IDGenObjectAttribute2" title="ID" text="{mcustomer>id}" />
-			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{mcustomer>attributes/customer_location/data/attributes/customerLocation_land}" />
-			<!-- <ObjectAttribute id="_IDGenObjectAttribute3" title="E-mail" text="{mcustomer>email}" /> -->
+			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{mcustomer>attributes/country}" />
 					</ObjectListItem>
 			</List>
 		</f:content>

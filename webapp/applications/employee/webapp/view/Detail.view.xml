@@ -15,13 +15,13 @@ class="viewPadding">
         <headerTitle>
             <ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <expandedHeading>
-                    <m:Title id="_IDGenTitle1" text="{memployee>id}" wrapping="true" class="sapUiSmallMarginEnd" />
+                    <m:Title id="_IDGenTitle1" text="{memployee>/firstName}" wrapping="true" class="sapUiSmallMarginEnd" />
                 </expandedHeading>
 
                 <snappedHeading>
                     <m:FlexBox id="_IDGenFlexBox1" wrap="Wrap" fitContainer="true" alignItems="Center">
                         <m:FlexBox id="_IDGenFlexBox2" wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
-                            <m:Title id="_IDGenTitle2" text="{memployee>orgid}" wrapping="true" class="sapUiTinyMarginEnd" />
+                            <m:Title id="_IDGenTitle2" text="{memployee>/id}" wrapping="true" class="sapUiTinyMarginEnd" />
                         </m:FlexBox>
                     </m:FlexBox>
                 </snappedHeading>
@@ -35,7 +35,18 @@ class="viewPadding">
         </headerTitle>
 
         <headerContent>
-            <m:FlexBox id="_IDGenFlexBox10" wrap="Wrap" fitContainer="true" alignItems="Start" justifyContent="Start">
+        <m:ObjectHeader id="_IDGenObjectHeader1" class="objHeaderClass" title="{memployee>/firstName}">
+                <m:statuses>
+                    <m:ObjectStatus id="_IDGenObjectStatus1" title="Country" text="{memployee>/country}"  />
+                    <m:ObjectStatus id="_IDGenObj1ectStatus1" title="City" text="{memployee>/city}" />
+                    
+                </m:statuses>
+                <m:attributes>
+                    <m:ObjectAttribute id="_IDGenObjectAttribute1" title="Phone" text="{memployee>/phone}" visible="true" />
+                    <m:ObjectAttribute id="_IDGenObjectAttribute2" title="Email" text="{memployee>/email}" visible="true" />
+                </m:attributes>
+            </m:ObjectHeader>
+            <!-- <m:FlexBox id="_IDGenFlexBox10" wrap="Wrap" fitContainer="true" alignItems="Start" justifyContent="Start">
                 <m:VBox id="_IDGenVBox10" class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                     <m:HBox id="_IDGenHBox11" class="sapUiTinyMarginEnd">
                         <m:Label id="_IDGenLa1bel1" text="" />
@@ -61,7 +72,7 @@ class="viewPadding">
                         <m:Text id="_IDGenText8" text="{memployee>contact}" />
                     </m:HBox>
                 </m:VBox>
-            </m:FlexBox>
+            </m:FlexBox> -->
         </headerContent>
 <!--  GENERAL INFORMATION OF EMPLOYEE-->
         <sections>
@@ -72,40 +83,39 @@ class="viewPadding">
                             <form:SimpleForm id="simpleFormInfoTab" title="" editable="false" class="editableForm sapUiSmallMarginTopBottom">
                              
                                         <m:Label id="_IDGenLabel121" text="Name  " />
-                                        <m:Text id="_IDGenText211" text="{memployee>Name}" />
+                                        <m:Text id="_IDGenText211" text="{memployee>/firstName}" />
                                
                                         <m:Label id="_IDGenLabel4172" text="Gender " />
-                                        <m:Text id="_IDGenText1473" text="{memployee>gender}" />
+                                        <m:Text id="_IDGenText1473" text="{memployee>/gender}" />
                                     
                                         <m:Label id="_IDGenLabel41467" text="DOB " />
-                                        <m:Text id="_IDGenText441647" text="{memployee>dob}" />
+                                        <m:Text id="_IDGenText441647" text="{memployee>/dob}" />
                                  
                                         <m:Label id="_IDGenLabel14647" text="Department " />
-                                        <m:Text id="_IDGenText16457" text="{memployee>department}" />
+                                        <m:Text id="_IDGenText16457" text="{memployee>/department}" />
                                       
                                       <m:Label id="_ID677" text="Designation " />
-                                        <m:Text id="_I677" text="{memployee>designation}" />
+                                        <m:Text id="_I677" text="{memployee>/designation}" />
 
                                         <m:Label id="_IDGenLabe3l13647" text="DOJ " />
-                                        <m:Text id="_IDGenText316347" text="{memployee>doj}" />
+                                        <m:Text id="_IDGenText316347" text="{memployee>/doj}" />
                                     
                                         <m:Label id="_IDGenLabel127" text="Telephone " />
-                                        <m:Text id="_IDGenText127" text="{memployee>contact}" />
+                                        <m:Text id="_IDGenText127" text="{memployee>/phone}" />
                                 
                                         <m:Label id="_IDGenLabel1367" text="Email " />
-                                        <m:Text id="_IDGenText1637" text="{memployee>email}" />
+                                        <m:Text id="_IDGenText1637" text="{memployee>/email}" />
                                    
                                         <m:Label id="_IDGenLabel13647" text="Reports To " />
-                                        <m:Text id="_IDGenText16347" text="{memployee>teamlead}" />
+                                        <m:Text id="_IDGenText16347" text="{memployee>/teamlead}" />
                                  
-                                        <m:Label id="_IDGen3Label13647" text="Probation Period " />
-                                        <m:Text id="_IDGen3Text16347" text="{memployee>probationperiod}" />
+                                        
                                  
                                         <m:Label id="_IDGenL172" text="Emergency Contact Name " />
-                                        <m:Text id="_IDGe73" text="{memployee>emcontactname}" />
+                                        <m:Text id="_IDGe73" text="{memployee>/emergencyContName}" />
                                  
                                         <m:Label id="_ID41467" text="Emergency Contact No. " />
-                                        <m:Text id="_IDGen1647" text="{memployee>emcontactno}" />
+                                        <m:Text id="_IDGen1647" text="{memployee>/emergencyContPhone}" />
                                    
                             </form:SimpleForm>
                       
@@ -135,16 +145,16 @@ class="viewPadding">
 			singleContainerFullSize="false" >
                                <form:content>
                                         <m:Label id="_Il167" text=" Bank " />
-                                        <m:Text id="_IDGen67" text="{memployee>bank}" />
+                                        <m:Text id="_IDGen67" text="{memployee>/p_bank_datum/bankName}" />
                                    
                                         <m:Label id="_IDGenl17" text="IFCS Code " />
-                                        <m:Text id="_ID17" text="{memployee>ifsc}" />
+                                        <m:Text id="_ID17" text="{memployee>/p_bank_datum/IFCScode}" />
                                  
                                         <m:Label id="_IDGen417" text="Bank Account No. " />
-                                        <m:Text id="_IDt147" text="{memployee>bankno}" />
+                                        <m:Text id="_IDt147" text="{memployee>/p_bank_datum/bankAccNo}" />
                                    
                                         <m:Label id="_Iel1467" text="UAN (PF Universal Account No.) " />
-                                        <m:Text id="_IDxt1647" text="{memployee>uan}" />
+                                        <m:Text id="_IDxt1647" text="{memployee>/p_bank_datum/uan}" />
                                         </form:content>
                             </form:SimpleForm>
                                    <form:SimpleForm id="SimpleFormDisplay480_12120"
@@ -153,19 +163,19 @@ class="viewPadding">
                                                 class="removeTitle" >
 			<form:content>
                                         <m:Label id="_IDG72" text=" PF Nominee " />
-                                        <m:Text id="_I473" text="{memployee>pfnominee}" />
+                                        <m:Text id="_I473" text="{memployee>/p_bank_datum/PFnominee}" />
                                    
                                         <m:Label id="_ID7" text="Nominee Address " />
-                                        <m:Text id="_ID647" text="{memployee>nomineeaddress}" />
+                                        <m:Text id="_ID647" text="{memployee>/p_bank_datum/nomineeAdress}" />
                                   
                                         <m:Label id="_IDG7" text="Nominee Relationship " />
-                                        <m:Text id="_IDGe57" text="{memployee>nomineerelationship}" />
+                                        <m:Text id="_IDGe57" text="{memployee>/p_bank_datum/nomineeRelationship}" />
                                    
                                         <m:Label id="_IDDG7" text="Nominee DOB " />
-                                        <m:Text id="_DGe57" text="{memployee>nomineedob}" />
+                                        <m:Text id="_DGe57" text="{memployee>/p_bank_datum/nomineeDOB}" />
                                
                                         <m:Label id="_I7" text="Nominee Share " />
-                                        <m:Text id="_D7" text="{memployee>nomineeshare}" />
+                                        <m:Text id="_D7" text="{memployee>/p_bank_datum/nomineeShare}" />
                                   
 
 </form:content>
@@ -182,16 +192,16 @@ class="viewPadding">
                             <form:SimpleForm id="_IDGenSimpleForm11"  title="" editable="false" class="editableForm sapUiSmallMarginTopBottom">
                                 
                                         <m:Label id="_IDGenLabel167" text="Country " />
-                                        <m:Text id="_IDGenText167" text="{memployee>country}" />
+                                        <m:Text id="_IDGenText167" text="{memployee>/country}" />
                                
                                         <m:Label id="_IDGenLabel17" text="City " />
-                                        <m:Text id="_IDGenText17" text="{memployee>city}" />
+                                        <m:Text id="_IDGenText17" text="{memployee>/city}" />
                                    
                                       <m:Label id="_IDGenLabel417" text="Region 1 " />
-                                        <m:Text id="_IDGenText147" text="{memployee>region1}" />
+                                        <m:Text id="_IDGenText147" text="{memployee>/address}" />
                                    
                                         <m:Label id="_IDGenLabel1467" text="ZipCode " />
-                                        <m:Text id="_IDGenText1647" text="{memployee>zipCode}" />
+                                        <m:Text id="_IDGenText1647" text="{memployee>/zipcode}" />
                                   
                             </form:SimpleForm>
                         
@@ -203,7 +213,7 @@ class="viewPadding">
                 <subSections>
                     <ObjectPageSubSection id="_IDGenObjectPageSubSection21">
                      
-                            <m:Table id="_IDGenTable1" mode="SingleSelectMaster" itemPress="handleItemPress"  items="{memployee>Projects}">
+                            <m:Table id="_IDGenTable1" mode="SingleSelectMaster" itemPress="handleItemPress"  items="{memployee>/p_projects/data}">
                                 <m:columns>
                                     <m:Column id="_IDGenColumn1">
                                         <m:Text id="cdbh" text="Projects" />
@@ -223,7 +233,7 @@ class="viewPadding">
                                 </m:columns>
                                 <m:items>
                                 <m:ColumnListItem id="_IDGenColumnListItem1">
-                                      <m:ObjectIdentifier id="_IDGenObjectIdentifier1" text="{memployee>ProjectName}" />
+                                      <m:ObjectIdentifier id="_IDGenObjectIdentifier1" text="{memployee>/attributes/ProjectName}" />
                                       <m:ObjectIdentifier id="_IDGenObjectIdentifier11" text="{memployee>Description}" />
                                       <m:ObjectIdentifier id="_IDGenObjectIdentifier21" text="{memployee>startdate}" />
                                       <m:ObjectIdentifier id="_IDGenObjectIdentifier31" text="{memployee>enddate}" />

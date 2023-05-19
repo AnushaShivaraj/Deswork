@@ -8,20 +8,30 @@ sap.ui.define([
 	"use strict";
 	return Controller.extend("VASPP.employee.controller.Master", {
 		onInit: function () {
-
+            var that= this;
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this.oRouter.getRoute("master").attachPatternMatched(function (oEvent) {
 				this.getView().byId("productsTable").removeSelections(true);
 
 			}, this);
 			this._bDescendingSort = false;
+
+			$.get("/deswork/api/users?populate=*",function(response){
+				response = JSON.parse(response);
+				var oModel = new sap.ui.model.json.JSONModel(response);
+				that.getView().setModel(oModel, "memployee");
+			}) 
 		},
 		onListItemPress: function (oEvent) {
-			var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
-				productPath = oEvent.getSource().getSelectedItem().getBindingContext("memployee").getPath(),
-				product = productPath.split("/").slice(-1).pop();
+			// var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
+			// 	productPath = oEvent.getSource().getSelectedItem().getBindingContext("memployee").getPath(),
+			// 	product = productPath.split("/").slice(-1).pop();
 
-			this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: product });
+			// this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: product });
+			var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
+			employeeID = oEvent.getSource().getSelectedItem().getBindingContext("memployee").getObject().id;
+		this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: employeeID });
+		this.getView().getModel("memployee").updateBindings(true);
 		},
 		//SEARCH THE EMPLOYEE DETAILS USING NAME
 		onSearch: function (oEvent) {
@@ -29,7 +39,7 @@ sap.ui.define([
 				sQuery = oEvent.getParameter("query");
 
 			if (sQuery && sQuery.length > 0) {
-				oTableSearchState = [new Filter("Name", FilterOperator.Contains, sQuery)];
+				oTableSearchState = [new Filter("firstName", FilterOperator.Contains, sQuery)];
 			}
 
 			this.getView().byId("productsTable").getBinding("items").filter(oTableSearchState, "Application");

@@ -23,12 +23,12 @@
 					 <ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
 						<expandedHeading>
 						
-						 <m:Title id="_IDGenTitle1" text="{mleave>_id}" wrapping="true" class="sapUiSmallMarginEnd"/>
+						 <m:Title id="_IDGenTitle1" text="{mleave>/attributes/0/users_permissions_user/data/0/id}" wrapping="true" class="sapUiSmallMarginEnd"/>
 						</expandedHeading>
 						<snappedHeading>
 							<m:FlexBox id="_IDGenFlexBox1" wrap="Wrap" fitContainer="true" alignItems="Center">
 								<m:FlexBox id="_IDGenFlexBox2" wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
-									<m:Title id="_IDGenTitle2" text="{mleave>_id}" wrapping="true" class="sapUiTinyMarginEnd"/>
+									<m:Title id="_IDGenTitle2" text="{mleave>/attributes/users_permissions_user/data/0/id}" wrapping="true" class="sapUiTinyMarginEnd"/>
 								</m:FlexBox>
 							</m:FlexBox>
 						</snappedHeading>
@@ -40,16 +40,27 @@
 					</ObjectPageDynamicHeaderTitle>
 				</headerTitle>
 				<headerContent>
-					<m:FlexBox id="_IDGenFlexBox10" wrap="Wrap" fitContainer="true" 	height="100px"
+				 <m:ObjectHeader id="_IDGenObjectHeader1" class="objHeaderClass" title="{mleave>/attributes/0/users_permissions_user/data/0/attributes/firstName}">
+                <m:statuses>
+                    <m:ObjectStatus id="_IDGenObjectStatus1" title="Start Date" text="{mleave>/attributes/startDate}"  />
+                    <m:ObjectStatus id="_IDGenObj1ectStatus1" title="End Date" text="{mleave>/attributes/endDate}" />
+                    
+                </m:statuses>
+                <m:attributes>
+                    <m:ObjectAttribute id="_IDGenObjectAttribute1" title="Name" text="{mleave>/attributes/users_permissions_user/data/id}" visible="true" />
+                    <m:ObjectAttribute id="_IDGenObjectAttribute2" title="Type" text="{mleave>/attributes/type}" visible="true" />
+                </m:attributes>
+            </m:ObjectHeader>
+					<!-- <m:FlexBox id="_IDGenFlexBox10" wrap="Wrap" fitContainer="true" 	height="100px"
 				alignItems="Start" justifyContent="Start">
                         <m:VBox id="_IDGenVBox10"  class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                             <m:HBox id="_IDGenHBox1" class="sapUiTinyMarginEnd" >
                             <m:Label id="_IDGenLabel117" text=""/>
-                            <m:Text id="_IDGenText11" text="{mleave>Name}"/>
+                            <m:Text id="_IDGenText11" text="{mleave>/attributes/users_permissions_user/data/0/attributes/firstName}"/>
                             </m:HBox>
                             <m:HBox id="_IDGenHBox11" class="sapUiTinyMarginEnd" >
                             <m:Label id="_IDGenLa1bel1" text=""/>
-                            <m:Text id="_IDGenText01" text="{mleave>leaveType}"/>
+                            <m:Text id="_IDGenText01" text="{mleave>/attributes/type}"/>
                             </m:HBox>
 							
 					    </m:VBox>
@@ -57,11 +68,11 @@
 				alignItems="Start" justifyContent="Start" id="_IDGenVBox11" class="sapUiSmallMarginEnd ">
 							<m:HBox id="_IDGenHBox1c" justifyContent="End" width="740px" class="sapUiTinyMarginEnd" >
                             <m:Label id="_IDGel11" text="From : "/>
-                            <m:Text id="_IDGxt11" text="{mleave>startDate}"/>
+                            <m:Text id="_IDGxt11" text="{mleave>/attributes/startDate}"/>
                             </m:HBox>
                             <m:HBox id="_IDG11" justifyContent="End" width="740px" class="sapUiTinyMarginEnd" >
                             <m:Label id="_IDGenel1" text="To : "/>
-                            <m:Text id="_IDGenTxt01" text="{mleave>endDate}"/>
+                            <m:Text id="_IDGenTxt01" text="{mleave>/attributes/endDate}"/>
                             </m:HBox>
 						<m:HBox  id="_IDGenVBox5" justifyContent="End" width="740px" class="sapUiSmallMarginEnd">
 							<m:Label id="_IDGenLabel7" text="Leaves Taken :" />
@@ -69,7 +80,7 @@
 							</m:HBox>
 						
                         </m:VBox>
-                    </m:FlexBox>
+                    </m:FlexBox> -->
 				</headerContent>
 				
 		<sections>                                  
@@ -85,11 +96,11 @@
 			<form:content>
 		
 				<m:Label id="_IDGenLabel8" text="Type of Leave " />
-				<m:Text id="_IDGenText12" text="{mleave>leaveType}"/>
+				<m:Text id="_IDGenText12" text="{mleave>/attributes/type}"/>
 				<m:Label id="_IDGenLabel2" text="No of Days"   />
-                <m:Text id="_IDGenText2" text="{mleave>numberOfDays}"/>
+                <m:Text id="_IDGenText2" text="{mleave>/attributes/NoOfDays}"/>
                 <m:Label id="_IDGenLabel6" text="Reason"  />
-				<m:Text id="_IDGenText10" text="{mleave>reason}"/>
+				<m:Text id="_IDGenText10" text="{mleave>/attributes/reason}"/>
 				
 					</form:content>
 		</form:SimpleForm>

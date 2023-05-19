@@ -69,12 +69,55 @@ sap.ui.define([
 					var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 					oRouter.navTo("master", { "AddCust": "Edit" });
 
-				} else {
-					that.getView().getModel("memployee").getData().EmployeeCollection.push(this.getView().getModel().getData());
+				} else 
+				//{
+					// that.getView().getModel("memployee").getData().EmployeeCollection.push(this.getView().getModel().getData());
 
-					var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-					oRouter.navTo("master", { "AddCust": "Add" });
-				}
+					// var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+					// oRouter.navTo("master", { "AddCust": "Add" });
+				//}
+				{
+					var settings = {
+					  "url": "/deswork/api/users",
+					  "method": "POST",
+					  "timeout": 0,
+					  "headers": {
+						"Content-Type": "application/json"
+					  },
+					  "data": JSON.stringify({
+						"data": {
+						  "name": that.getView().byId("idProjectId1").getValue(),
+						  "description": that.getView().byId("idProjectId2").getValue(),
+						  "businessType": that.getView().byId("idProjectId3").getValue(),
+						  "email": that.getView().byId("idProjectId4").getValue(),
+						  "phone": that.getView().byId("idProjectId5").getValue(),
+						  "country": that.getView().byId("idProjectId6").getValue(),
+						  "region": that.getView().byId("idProjectId7").getValue(),
+						  "address": that.getView().byId("idProjectId8").getValue(),
+						  "zipCode": that.getView().byId("idProjectId9").getValue(),
+						  "cpFirstName": that.getView().byId("idProjectId10").getValue(),
+						  "cpMiddleName": that.getView().byId("idProjectId11").getValue(),
+						  "cpLastName": that.getView().byId("idProjectId12").getValue(),
+						  "cpDesignation": that.getView().byId("idProjectId13").getValue(),
+						  "cpPhone": that.getView().byId("idProjectId14").getValue(),
+						  "cpEmail": that.getView().byId("idProjectId15").getValue(),
+						  
+		  
+						}
+					  }),
+					};
+		  
+					$.ajax(settings).done(function (response) {
+					  response = JSON.parse(response);
+					  if (response.error) {
+						MessageBox.error(response.error.message);
+					  } else {
+						var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+						oRouter.navTo("master", { "AddCust": "Add" });
+					  }
+		  
+					});
+				  }
 
 				that.getView().getModel("memployee").updateBindings(true);
 			}

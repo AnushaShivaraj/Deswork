@@ -15,7 +15,7 @@ sap.ui.define([
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this.oModel = this.getOwnerComponent().getModel();
 
-			this.oRouter.getRoute("detail").attachPatternMatched(this._onProductMatched, this);
+			this.oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
 			[oExitButton, oEnterButton].forEach(function (oButton) {
 				oButton.addEventDelegate({
 					onAfterRendering: function () {
@@ -32,12 +32,12 @@ sap.ui.define([
 		handleFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
-			this.oRouter.navTo("detail", { layout: sNextLayout, product: this._product });
+			this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
 		},
 		handleExitFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/exitFullScreen");
-			this.oRouter.navTo("detail", { layout: sNextLayout, product: this._product });
+			this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
 		},
 		handleClose: function () {
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/closeColumn");
@@ -98,40 +98,77 @@ sap.ui.define([
 		},
 
 
-		_onProductMatched: function (oEvent) {
-			this._product = oEvent.getParameter("arguments").product || this._product || "0";
-			this.getView().bindElement({
-				path: "/EmployeeCollection/" + this._product,
-				model: "memployee"
+		_onObjectMatched: function (oEvent) {
+			// this._product = oEvent.getParameter("arguments").product || this._product || "0";
+			// this.getView().bindElement({
+			// 	path: "/EmployeeCollection/" + this._product,
+			// 	model: "memployee"
+			// });
+			// //attachment
+			// var attachmentModel = new sap.ui.model.json.JSONModel(this.getView().mElementBindingContexts.memployee.getObject().documents);
+			// this.getView().setModel(attachmentModel,"attachmentModel");
+			// this.getView().getModel("attachmentModel").updateBindings(true);
+			var that = this;
+			this.id = oEvent.getParameter("arguments").product
+			var options = {};
+			$.get('/deswork/api/users/' + this.id + '?populate[0]=p_project_teams&populate[1]=p_bank_datum', options, function (response) {
+				console.log(response);
+				response = JSON.parse(response);
+				var oModel = new sap.ui.model.json.JSONModel(response);
+				that.getView().setModel(oModel, "memployee");
+				
 			});
-			//attachment
-			var attachmentModel = new sap.ui.model.json.JSONModel(this.getView().mElementBindingContexts.memployee.getObject().documents);
-			this.getView().setModel(attachmentModel,"attachmentModel");
-			this.getView().getModel("attachmentModel").updateBindings(true);
 		},
 //TO DELETE THE EMPLOYEE DETAILS
 		onDetailPageDelete: function (evt) {
+			// var that = this;
+			// var oItems = evt.getSource().getBindingContext("memployee").getObject().Name;
+			// var oData = that.getView().getModel("memployee").getData().EmployeeCollection;
+			// MessageBox.confirm("Are you sure you want to Delete  ?", {
+			// 	actions: ["Yes", "No"],
+			// 	emphasizedAction: "Yes",
+			// 	onClose: function (oEvent) {
+			// 		if (oEvent == "Yes") {
+			// 			for (var i = 0; i < oData.length; i++) {
+			// 				var products = oData[i];
+											
+			// 				if (products.Name === oItems) {
+			// 					that.getView().getModel("memployee").getData().EmployeeCollection.splice(i, 1)
+								
+			// 				}
+			// 			}
+			// 			that.getView().getModel("memployee").updateBindings(true);
+			// 			MessageBox.success("Employee details has been deleted");
+			// 			//NAVIGATE TO MASTER			
+			// 			var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+			// 			oRouter.navTo("master");
+			// 		}
+			// 	}
+			// }
+			// );
+
 			var that = this;
-			var oItems = evt.getSource().getBindingContext("memployee").getObject().Name;
-			var oData = that.getView().getModel("memployee").getData().EmployeeCollection;
 			MessageBox.confirm("Are you sure you want to Delete  ?", {
 				actions: ["Yes", "No"],
 				emphasizedAction: "Yes",
-				onClose: function (oEvent) {
-					if (oEvent == "Yes") {
-						for (var i = 0; i < oData.length; i++) {
-							var products = oData[i];
-											
-							if (products.Name === oItems) {
-								that.getView().getModel("memployee").getData().EmployeeCollection.splice(i, 1)
-								
+				onClose: function (evt) {
+					if (evt == "Yes") {
+						$.ajax({
+							type: "DELETE",
+							url: "/deswork/api/users/" + that.id,
+							success: function (response) {
+								var resv = JSON.parse(response);
+								console.log(resv)
+								if (resv.error) {
+									MessageBox.error(resv.error.message)
+								}
+								else {
+									MessageBox.success("Employee has been deleted");
+									that.getView().getModel("memployee").updateBindings(true);
+								}
 							}
-						}
-						that.getView().getModel("memployee").updateBindings(true);
-						MessageBox.success("Employee details has been deleted");
-						//NAVIGATE TO MASTER			
-						var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-						oRouter.navTo("master");
+
+						})
 					}
 				}
 			}

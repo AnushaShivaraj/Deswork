@@ -624,6 +624,14 @@ onBackButtonPress: function () {
 		},
 		
 		_objMatched: function (oEvent) {
+			
+			$.get("/deswork/api/p-projects?populate=*",function(response){
+				response = JSON.parse(response);
+			//	debugger
+				var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getView().setModel(oModel, "mreport");
+			}) 
+			
 			var that = this;
 				this.oBundle = this.getOwnerComponent().getModel("mreport");
 				this.Title = oEvent.getParameter("arguments").selectedKPI;
@@ -643,6 +651,7 @@ onBackButtonPress: function () {
 		this.getView().byId("drillDownTableIdchartleave").setVisible(false);
 		this.getView().byId("drillDownTableIdchartmonth").setVisible(false);
 		this.getView().byId("drillDownTableIdchartbudget").setVisible(false);
+		
 	}
 	if(this.Title == "Total Task"){
 		this.getView().byId("drillDownTableIdproject").setVisible(false);

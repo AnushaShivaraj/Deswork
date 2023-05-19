@@ -20,7 +20,7 @@
 				mode="SingleSelectMaster"
 				headerText="Leave Application List"
 				itemPress="onListItemPress"
-				items="{mvendor>/VendorCollection/}"
+				items="{mvendor>/}"
 				>
 				<headerToolbar>
 		
@@ -35,14 +35,14 @@
 					
 				</headerToolbar>
 			
-					<ObjectListItem id="_IDGenColumnListItem1" title="{mvendor>VendorName}" type="Navigation" >
+					<ObjectListItem id="_IDGenColumnListItem1" title="{mvendor>attributes/name}" type="Navigation" >
 			<firstStatus >
-			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{mvendor>noofproject}"
+			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{mvendor>attributes/p_projects/attributes/data/length}"
 				 />
 		    </firstStatus>
 			<ObjectAttribute id="_IDGenObjectAttribute2" title="ID" text="{mvendor>id}" />
-			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{mvendor>country}" />
-			<ObjectAttribute id="_IDGenObjectAttribute3" title="E-mail" text="{mvendor>contactEmail}" />
+			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{mvendor>attributes/country}" />
+			
 					</ObjectListItem>
 			</List>
 		</f:content>

@@ -37,8 +37,8 @@
 					</LightBox>
 				</f:detailBox>
 			</f:Avatar>
-			<Title  text="{/firstName} {loggedOnUserModel>lastName} ({loggedOnUserModel>/designation})" class="sapUiTinyMarginBottom" />
-			<Text  text="{loggedOnUserModel>/email}" class="sapUiTinyMarginBottom" />
+			<Title  text="{/firstName} {/lastName} ({/designation})" class="sapUiTinyMarginBottom" />
+			<Text  text="{/email}" class="sapUiTinyMarginBottom" />
 			<Text text="{/country}" class="sapUiTinyMarginBottom" visible="{= !!${/country}}" />
 			<!-- <Text id="_IDGenTextf3" text="{organisation>/name}" visible="{= !!${/organisation/name}}" /> -->
 		</VBox>
