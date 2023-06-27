@@ -38,8 +38,8 @@
         "title": "Manage Projects",
         "icon": "sap-icon://add-activity-2",
         "expanded": false,
-        "key": "ManageProjects",
-        "componentName": "VASPP.Manage_Project",
+        "key": "Projects",
+        "componentName": "VASPP.Projects",
         "permittedRoles": [
             "manager",
             "technici"
@@ -50,7 +50,9 @@
             "update": false,
             "delete": false
         },
-        "items": []
+        "items": [
+          
+        ]
     },
     {
         "applicationid": "APP10001",

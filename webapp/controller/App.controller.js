@@ -607,7 +607,7 @@ sap.ui.define([
 				this.getView().getModel("appView").setProperty("/layout", "MidColumnFullScreen");
 				var oRouter1 = sap.ui.core.UIComponent.getRouterFor(this);
 				oRouter1.navTo("applicationlist");
-			} else if (sKey === "Manage_Projects") {
+			} else if (sKey === "Projects") {
 				this.getView().getModel("appView").setProperty("/layout", "MidColumnFullScreen");
 				var oRouter1 = sap.ui.core.UIComponent.getRouterFor(this);
 				oRouter1.navTo("Master");
@@ -626,7 +626,7 @@ sap.ui.define([
 					if (oMenuItem.key == 'ProjectStatisticalReport') {
 						return true;
 					}
-					else if (oMenuItem.key == 'ManageProjects') {
+					else if (oMenuItem.key == 'Projects') {
 						return true;
 					}
 					else if (oMenuItem.key == 'UsersManagement') {
