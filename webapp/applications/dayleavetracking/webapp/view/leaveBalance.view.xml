@@ -1,0 +1,74 @@
+<mvc:View controllerName="vaspp.dayleavetracking.controller.leaveBalance"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+   
+
+	<Page id="_IDGenPage2" title="Leave Balance">
+		<!-- <headerContent> -->
+			<!-- /<Button  id="btn" icon="sap-icon://enter-more" tooltip="Add holiday" text="Revise Holidays"  -->
+				<!-- press="onPressLeaveBalance" type="Emphasized"/> -->
+		<!-- </headerContent> -->
+		<content>	
+			<OverflowToolbar id="_IDGenOverflowToolbar1">
+				<ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+				<OverflowToolbarButton id="iconedit" icon="sap-icon://edit" type="Transparent" press="onEditleaves"/>
+                <OverflowToolbarButton id="icondelete" icon="sap-icon://delete" type="Transparent" press="onDeleteleaves"/> 
+				<OverflowToolbarButton id="iconrevise" icon="sap-icon://enter-more" type="Transparent" press="onPressLeaveBalance"/> 
+      	    </OverflowToolbar>
+		  <Table id="leavesTracking" mode="MultiSelect" items="{path: 'balanceleave>/'}">
+				<columns>
+					<!-- <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"> <header> <Label text="Employee"/> </header> </Column> -->
+					<Column id="_IDGenColumn1" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<header>
+							<Label id="_IDGenLabel1" text="Employee Name"/>
+						</header>
+					</Column>
+					<Column id="_IDGenColumn2" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<header>
+							<Label id="_IDGenLabel2" text="Default Leaves"/>
+						</header>
+					</Column>
+					<Column id="_IDGenColumn3" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<header>
+							<Label id="_IDGenLabel3" text="Carry Forward Leaves"/>
+						</header>
+					</Column>
+                    <Column id="_IDGenColumn4" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<header>
+							<Label id="_IDGenLabel4" text="Sick Leaves"/>
+						</header>
+					</Column>
+                    <Column id="_IDGenColumn6" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<header>
+							<Label id="_IDGenLabel6" text="Paid Leaves"/>
+						</header>
+					</Column>
+                    <Column id="_IDGenColumn7" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+						<header>
+							<Label id="_IDGenLabel7" text="Unpaid Leaves"/>
+						</header>
+					</Column>
+				</columns>
+				<ColumnListItem id="_IDGenColumnListItem1">
+					<cells>
+						<!-- {"_id":"5d1b4ed60618535a49a051a5","defaultleaves":30,"carryforwardleaves":0,"year":2019,"auditor_id":"5cf118926a5fe2106882eb90","sickLeaves":0,"vacationLeaves":0}] -->
+						<Text id="_IDGenText1" text="{balanceleave>attributes/userName}"/>
+                        <Text id="_IDGenText2" text="{balanceleave>attributes/defaultLeaves}"/>
+						<Text id="_IDGenText3" text="{balanceleave>attributes/carryForwardLeaves}"/>
+                        <Text id="_IDGenText5" text="{balanceleave>attributes/sickLeaves}"/>
+						<Text id="_IDGenText6" text="{balanceleave>attributes/paidLeaves}"/>
+                        <Text id="_IDGenText7" text="{balanceleave>attributes/unPaidLeaves}"/>
+					</cells>
+				</ColumnListItem>
+			</Table>
+		</content>
+		<footer>
+			<Bar id="_IDGenBar1">
+				<contentRight>
+					<Button id="_IDGenButton1" text="Day tracking" press="onPressDayTracking" type="Emphasized" tooltip="Day tracking"/>
+                    <Button id="_IDGenButton2" text="Week tracking" press="onPressWeekTracking" type="Emphasized" tooltip="Week tracking"/>
+				</contentRight>
+			</Bar>
+		</footer>
+		</Page>
+</mvc:View>

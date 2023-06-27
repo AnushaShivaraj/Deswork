@@ -6,7 +6,7 @@ sap.ui.define([
 	"sap/m/library",
 	"sap/m/MessageBox",
 	"sap/m/TextArea"
-], function (Controller,  Dialog, Button,Label, mobileLibrary,MessageBox,TextArea) {
+], function (Controller, Dialog, Button, Label, mobileLibrary, MessageBox, TextArea) {
 	"use strict";
 	// shortcut for sap.m.ButtonType
 	var ButtonType = mobileLibrary.ButtonType;
@@ -15,145 +15,226 @@ sap.ui.define([
 	var DialogType = mobileLibrary.DialogType;
 	return Controller.extend("vaspp.Leave.controller.Detail", {
 
-		onInit: function (evt) {
-			
-			var oExitButton = this.getView().byId("exitFullScreenBtn"),
-				oEnterButton = this.getView().byId("enterFullScreenBtn");
-			this.oRouter = this.getOwnerComponent().getRouter();
-			this.oModel = this.getOwnerComponent().getModel();
-			this.oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
+		onInit: function () {
+			var that = this;
+			that.getUserDetails();
+			var oExitButton = that.getView().byId("exitFullScreenBtn");
+			var oEnterButton = that.getView().byId("enterFullScreenBtn");
+			that.oRouter = that.getOwnerComponent().getRouter();
+			that.oModel = that.getOwnerComponent().getModel();
+			that.oRouter.getRoute("detail").attachPatternMatched(that._onObjectMatched, that);
 			[oExitButton, oEnterButton].forEach(function (oButton) {
 				oButton.addEventDelegate({
 					onAfterRendering: function () {
-						if (this.bFocusFullScreenButton) {
-							this.bFocusFullScreenButton = false;
+						if (that.bFocusFullScreenButton) {
+							that.bFocusFullScreenButton = false;
 							oButton.focus();
 						}
-					}.bind(this)
+					}.bind(that)
 				});
-			}, this);	
+			}, that);		
 		},
-		
-		//FULL SCREEN
+
 		handleFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
-			this.oRouter.navTo("detail", {layout: sNextLayout, product: this.id});
+			this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
 		},
 		//EXIT FULL SCREEN
 		handleExitFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/exitFullScreen");
-			this.oRouter.navTo("detail", {layout: sNextLayout, product: this.id});
+			this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
 		},
 		//CLOSE THE DETAIL
 		handleClose: function () {
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/closeColumn");
-			this.oRouter.navTo("master", {layout: sNextLayout});
+			this.oRouter.navTo("master", { layout: sNextLayout });
 		},
-
 		_onObjectMatched: function (oEvent) {
-			// this._product = oEvent.getParameter("arguments").product || this._product || "0";
-			// this.getView().bindElement({
-			// 	path: "/details/" + this._product,
-			// 	model: "mleave"
-			// });
-
 			var that = this;
-			this.id = oEvent.getParameter("arguments").product
+			that.id = oEvent.getParameter("arguments").product;
 			var options = {};
-			$.get('/deswork/api/p-leaves/' + this.id + '?populate[0]=users_permissions_user', options, function (response) {
-				console.log(response);
+			var mAdttachment = [];
+			$.get('/deswork/api/p-leaves/' + that.id + '?populate=*', options, function (response) {
 				response = JSON.parse(response);
 				var oModel = new sap.ui.model.json.JSONModel(response.data);
 				that.getView().setModel(oModel, "mleave");
-				
+				mAdttachment = response.data.attributes.p_attachment.data;
+				var kModel = new sap.ui.model.json.JSONModel(mAdttachment);
+				that.getView().setModel(kModel, "mDocuments"); 				
 			});
-			
 		},
-// APPROVE BUTTON
-		onInitialFocusOnAccept: function (evt) {
-			var that=this;
-			var oItems = evt.getSource().getBindingContext("mleave").getObject()._id;
-			var oData = that.getView().getModel("mleave").getData().details;
-					MessageBox.confirm("Are you sure you want Approve  ?", {
-						actions: ["Yes", "No"], 
-						emphasizedAction: "Yes",
-						onClose: function (oEvent) { 
-							if (oEvent == "Yes")
-							{for(var i = 0; i < oData.length; i++){				
-									var products = oData[i];	
-									if(products._id === oItems){
-										that.getView().getModel("mleave").getData().details.splice(i,1)	
-									}
-								}	
-								that.getView().getModel("mleave").updateBindings(true);
-								MessageBox.success("Leave has been Approved");	
-								var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-			                    oRouter.navTo("master");
-							}
-							}
-					  }	
-		    	);
-					},
-			//	REJECT BUTTON		 
-		
-		onInitialFocusOnReject:function(){
-			// var that=this;
-				
-		if (!this.oRejectDialog) {
-			
-			this.oRejectDialog = new Dialog({
-				title: "Are you sure you want to reject?",
-				type: DialogType.Message,
-				content: [
-					new Label({
-						text: "Please Enter the Reason for Rejection",
-						labelFor: "rejectionNote",
-					}),
-					new TextArea("rejectionNote", {
-						width: "100%",
-						placeholder: "Add Reason for Rejection (optional)"
-					})
-				],
-				beginButton: new Button({
-					type: ButtonType.Emphasized,
-					text: "Reject",
-					press: function () {
-						var that=this;
-						var oItems = that.getView().getBindingContext("mleave").getObject()._id;
-						 var oData = that.getView().getModel("mleave").getData().details;	
-
-			for(var i = 0; i < oData.length; i++){				
-				var products = oData[i];	
-							
-				if(products._id === oItems){
-					this.getView().getModel("mleave").getData().details.splice(i,1)
-					
-					
+		getLeaveHistory: function(id) {
+			var that = this;			
+			var url = 'deswork/api/p-leaves?filters[requestedById]eq=' + id;
+			$.ajax({
+				url: url,
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				success: function (response) {
+					response = JSON.parse(response);
+					var oModel = new sap.ui.model.json.JSONModel(response.data);
+					that.getView().setModel(oModel, "leaveHistory");
 				}
-			}	
-			this.getView().getModel("mleave").updateBindings(true);
-			MessageBox.success("Leave has been Rejected");	
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-				oRouter.navTo("master");
-				this.oRejectDialog.close();
-					}.bind(this)	
+			});
+		},
+		// APPROVE BUTTON
+		onInitialFocusOnAccept: function () {
+			var that = this;
+			that.onSubmitResponse("Approved");
+		},
+		onInitialFocusOnReject: function () {
+			var that = this;
+			that.onSubmitResponse("Rejected");
+		},
+		onDownloadSelectedButton: function () {
+			var oUploadSet = this.byId("UploadSet");
+			oUploadSet.getItems().forEach(function (oItem) {
+				if (oItem.getListItem().getSelected()) {
+					oItem.download(true);
 				}
-				),
-				endButton: new Button({
-					text: "Cancel",
-					press: function () {
-						
-						this.oRejectDialog.close();
-					}.bind(this)
-				})
+			});
+		},
+		onSubmitResponse: function (status) {
+			var that = this;
+			that.getDataToUpdate(status);
+		},
+		getDataToUpdate: function (status) {
+			var that = this;
+			var response = that.getView().getModel("mleave").getData();
+			response.attributes.status = status;
+			if (status === 'Approved') {
+				if(response.attributes.halfDay) {
+					response.attributes.leave_balance = that.balanceLeaves - 0.5;
+				} else {
+					response.attributes.leave_balance = that.balanceLeaves - response.attributes.NoOfDays;
+				}
+				that.balanceLeaves = response.attributes.leave_balance;
+				response.attributes.approvedBy = that.approvedBy;
+			}
+			that.updateStatus(response.attributes, status);
+		},
+		updateStatus: function (data, status) {
+			var that = this;
+			var updateUrl = '/deswork/api/p-leaves/' + that.id;
+			$.ajax({
+				url: updateUrl,
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json"
+				}, data: JSON.stringify({
+					"data": {
+						"startDate": data.startDate,
+						"endDate": data.endDate,
+						"NoOfDays": 1,
+						"type": data.type,
+						"status": data.status,
+						"reason": data.reason,
+						"halfDay": data.halfDay,
+						"leave_balance": data.leave_balance,
+						"approvedBy": data.approvedBy,
+						"requestedBy": data.requestedBy,
+						"requestedById": data.requestedById,
+					}
+				}),
+				success: function (response) {
+					that.updateLeaveBalance(data, status);	
+				}
+			});
+		},
+		updateLeaveBalance: function (leave,status) {
+			var that = this;
+			var data = that.getView().getModel("balanceleave").getData().data[0];
+			data.attributes.balanceLeaves = that.balanceLeaves;
+			var temp = data.attributes;
+			if(leave.type === "Sick Leave") {
+				if(leave.halfDay) {
+					temp.sickLeaves = temp.sickLeaves + 0.5;
+				} else {
+					temp.sickLeaves = temp.sickLeaves + leave.NoOfDays;
+				}
+			} else if(leave.type === "Unpaid Leave") {
+				if(leave.halfDay) {
+					temp.unPaidLeaves = temp.unPaidLeaves + 0.5;
+				} else {
+					temp.unPaidLeaves = temp.unPaidLeaves + leave.NoOfDays;
+				}
+			} else {
+				if(leave.halfDay) {
+					temp.paidLeaves = temp.paidLeaves + 0.5;
+				} else {
+					temp.paidLeaves = temp.paidLeaves + leave.NoOfDays;
+				}
+			}
+			temp.balanceLeaves = that.balanceLeaves;
+			var updateUrl = '/deswork/api/p-balance-leaves/' + that.balanceLeavesId ;
+			$.ajax({
+				url: updateUrl,
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json"
+				}, data: JSON.stringify({
+					"data": {
+					"year": temp.year,
+					"defaultLeaves": temp.defaultLeaves,
+					"carryForwardLeaves": temp.carryForwardLeaves,
+					"balanceLeaves": that.balanceLeaves,
+					"sickLeaves": temp.sickLeaves,
+					"paidLeaves": temp.paidLeaves,               
+					"unPaidLeaves": temp.unPaidLeaves,
+					"userId": temp.userId,
+					"userName": temp.userName
+				}
+				  }),
+				success: function (response) {
+					sap.m.MessageToast.show(status);
+					that.handleClose();
+				}
+			});
+		},
+		getUserDetails: function() {
+			var that = this;			
+			var url = 'deswork/api/users/me?populate=*';
+			$.ajax({
+				url: url,
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				success: function (response) {
+					response = JSON.parse(response);
+					that.userId = response.id;
+					var oModel = new sap.ui.model.json.JSONModel(response);
+					that.getView().setModel(oModel, "userModel");
+					that.approvedBy = response.username;
+					that.getBalanceLeavesData(response.id);
+					that.getLeaveHistory(response.id);
+				}
+			});
+		},
+		getBalanceLeavesData: function(id) {
+			var that = this;
+			var currentYear = new Date();
+			currentYear = currentYear.getFullYear();
+			var balanceLeaveUrl = '/deswork/api/p-balance-leaves?populate=*&filters[year][$eq]=';
+			balanceLeaveUrl = balanceLeaveUrl + currentYear + '&filters[userId][$eq]=' + id;
+			$.ajax({
+				url: balanceLeaveUrl,
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				success: function (res) {
+					res = JSON.parse(res);					
+					that.balanceLeaves = res.data[0].attributes.balanceLeaves;
+					that.balanceLeavesId = res.data[0].id;
+					var oModel2 = new sap.ui.model.json.JSONModel(res);
+					that.getView().setModel(oModel2, "balanceleave");
+				}
 			});
 		}
-		//to clear the data present in comment box
-		this.oRejectDialog.getContent()[1].setValue();
-          this.oRejectDialog.open();
-   },
 	});
 });
-

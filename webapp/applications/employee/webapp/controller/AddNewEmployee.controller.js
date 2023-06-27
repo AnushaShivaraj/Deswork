@@ -8,122 +8,200 @@ sap.ui.define([
 		onInit: function () {
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.getOwnerComponent().getRouter().getRoute("AddNewEmployee").attachPatternMatched(this.onObjectMatched, this);
+			//this.getView().setBusy(true);
+			this.mrolesuser();
 		},
 		onObjectMatched: function (oEvent) {
 			var that = this;
-			var task = oEvent.getParameter("arguments").AddCust;
-			that.isAdd = task;
-			if (task !== "Edit") {
+			that.isAdd = oEvent.getParameter("arguments").AddCust;
+			// that.getView().byId("idProjectId3").getSelected(false);
+			that.getView().byId("idProjectId5").getSelectedKey("");
+			that.empid = oEvent.getParameter("arguments").listindex;
+			if (that.isAdd !== "Edit") {
 				that.getView().setModel(new JSONModel({}));
 				//this.getView().setModel(new JSONModel({}));
+				that.getView().setBusy(false);
 			} else {
+				var usersModel = this.getOwnerComponent().getModel("custUpdateDetails").getData();
+				// that.getView().byId("idProjectId").setVisible(false);
+				// that.getView().byId("_IDGenLabe1l110").setVisible(false);
+				var multiComboBox = this.getView().byId("idProjectIdmultirole");
+				var selectedKeys = [];
 
-				
+				usersModel.p_team_role_users.forEach(function (selectedItem) {
+					var itemKey = selectedItem.id;
+					selectedKeys.push(itemKey);
+				});
+				// for (var m = 0; m < aSelectedItems.length; m++) {
+				// 	aSelectedItems[m].setSelected(true);
+				// }
+	
 
-				var prodd = oEvent.getParameter("arguments").listindex;
-				var MyModel = that.getView().getModel("memployee").getData().EmployeeCollection[prodd]
-
+				multiComboBox.setSelectedKeys(selectedKeys);
 				var data = {
-					"Name": MyModel.Name,
-					"id": MyModel.id,
-					"gender": MyModel.gender,
-					"dob": MyModel.dob,
-					"department": MyModel.department,
-					"designation": MyModel.designation,
-					"doj": MyModel.doj,
-					"contact": MyModel.contact,
-					"email": MyModel.email,
-					"teamlead": MyModel.teamlead,
-					"probationperiod": MyModel.probationperiod,
-					"emcontactname": MyModel.emcontactname,
-					"emcontactno": MyModel.emcontactno,
-					"bank": MyModel.bank,
-					"ifsc": MyModel.ifsc,
-					"bankno": MyModel.bankno,
-					"uan": MyModel.uan,
-					"pfnominee": MyModel.pfnominee,
-					"nomineeaddress": MyModel.nomineeaddress,
-					"nomineerelationship": MyModel.nomineerelationship,
-					"nomineedob": MyModel.nomineedob,
-					"nomineeshare": MyModel.nomineeshare,
-					"country": MyModel.country,
-					"city": MyModel.city,
-					"region1": MyModel.region1,
-					"zipCode": MyModel.zipCode,
+
+					"firstName": usersModel.firstName,
+					"lastName": usersModel.lastName,
+					//"lastName": Name.split(" ")[1] ? Name.split(" ")[1] : "",
+					"gender": this.getView().byId("idProjectId3").getSelectedIndex(),
+					"department": usersModel.department,
+					"designation": usersModel.designation,
+					"password": this.getView().byId("idProjectId").getValue(),
+					"phone": usersModel.phone,
+					"email": usersModel.email,
+					"emergencyContName": usersModel.emergencyContName,
+					"emergencyContPhone": usersModel.emergencyContPhone,
+					"bankName": usersModel.bankName,
+					"IFCScode": usersModel.IFCScode,
+					"bankAccNo": usersModel.bankAccNo,
+					"uan": usersModel.uan,
+					"country": usersModel.country,
+					"city": usersModel.city,
+					"address": usersModel.address,
+					"zipCode": usersModel.zipCode,
+					"p_team_role_users": this.getView().byId("idProjectIdmultirole").getSelectedItems(),
+					"rate_card": usersModel.rate_card
 				};
 				this.getView().setModel(new JSONModel(data));
-				this.getView().getModel("memployee").getData().EmployeeCollection.splice(prodd, 1, data);
-
-				this.getView().getModel("memployee").updateBindings(true)
-
+				// this.getView().getModel("memployee").getData().EmployeeCollection.splice(prodd, 1, data);
+				// this.getView().getModel("memployee").updateBindings(true);
 			}
 		},
-		//ADDING AND UPDATING EMPLOYEE DETAILS
-		handleAddUserOkPress: function (oEvent) {
+		mrolesuser: function () {
 			var that = this;
-			var Err = this.ValidateCreateCust();
-			if (Err == 0) {
-				if (that.isAdd == "Edit") {
+			$.ajax({
+				type: "GET",
+				url: '/deswork/api/p-team-role-users?populate=*',
+				success: function (response) {
+					that.getView().setBusy(false);
+					var resv = JSON.parse(response);
+					if (resv.error) {
+						MessageBox.error(resv.error.message)
+					}
+					else {
+						var oModel = new sap.ui.model.json.JSONModel(resv.data);
+						that.getOwnerComponent().setModel(oModel, "mrolesuser");
+						that.getOwnerComponent().getModel("mrolesuser").updateBindings(true);
+						//MessageBox.success("Employee has been created successfully!");
 
-					this.getOwnerComponent().getModel("memployee").updateBindings(true);
-					var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-					oRouter.navTo("master", { "AddCust": "Edit" });
+					}
+				}
 
-				} else 
-				//{
-					// that.getView().getModel("memployee").getData().EmployeeCollection.push(this.getView().getModel().getData());
-
-					// var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-					// oRouter.navTo("master", { "AddCust": "Add" });
-				//}
-				{
-					var settings = {
-					  "url": "/deswork/api/users",
-					  "method": "POST",
-					  "timeout": 0,
-					  "headers": {
-						"Content-Type": "application/json"
-					  },
-					  "data": JSON.stringify({
-						"data": {
-						  "name": that.getView().byId("idProjectId1").getValue(),
-						  "description": that.getView().byId("idProjectId2").getValue(),
-						  "businessType": that.getView().byId("idProjectId3").getValue(),
-						  "email": that.getView().byId("idProjectId4").getValue(),
-						  "phone": that.getView().byId("idProjectId5").getValue(),
-						  "country": that.getView().byId("idProjectId6").getValue(),
-						  "region": that.getView().byId("idProjectId7").getValue(),
-						  "address": that.getView().byId("idProjectId8").getValue(),
-						  "zipCode": that.getView().byId("idProjectId9").getValue(),
-						  "cpFirstName": that.getView().byId("idProjectId10").getValue(),
-						  "cpMiddleName": that.getView().byId("idProjectId11").getValue(),
-						  "cpLastName": that.getView().byId("idProjectId12").getValue(),
-						  "cpDesignation": that.getView().byId("idProjectId13").getValue(),
-						  "cpPhone": that.getView().byId("idProjectId14").getValue(),
-						  "cpEmail": that.getView().byId("idProjectId15").getValue(),
-						  
-		  
-						}
-					  }),
-					};
-		  
-					$.ajax(settings).done(function (response) {
-					  response = JSON.parse(response);
-					  if (response.error) {
-						MessageBox.error(response.error.message);
-					  } else {
+			})
+		},
+		//Get service for user list
+		handleGetUser: function () {
+			var that = this;
+			$.ajax({
+				type: "GET",
+				url: '/deswork/api/users?populate=*',
+				success: function (response) {
+					that.getView().setBusy(false);
+					var resv = JSON.parse(response);
+					if (resv.error) {
+						MessageBox.error(resv.error.message)
+					}
+					else {
+						var oModel = new sap.ui.model.json.JSONModel(resv);
+						that.getOwnerComponent().setModel(oModel, "memployee");
+						that.getOwnerComponent().getModel("memployee").updateBindings(true);
+						MessageBox.success("Employee has been created successfully!");
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
 						oRouter.navTo("master", { "AddCust": "Add" });
-					  }
-		  
-					});
-				  }
+					}
+				}
 
-				that.getView().getModel("memployee").updateBindings(true);
+			})
+		},
+
+		//ADDING AND UPDATING EMPLOYEE DETAILS
+		handleAddUserOkPress: function (customerId) {
+			var that = this;
+			var genderVal = that.getView().byId("idProjectId3").getSelectedButton() ? that.getView().byId("idProjectId3").getSelectedButton().getText() : "";
+			var Name = that.getView().byId("idProjectId1").getValue();
+			var department = that.getView().byId("idProjectId5");
+			if (genderVal == "Male") {
+				genderVal = "M";
+			} else if (genderVal == "Female") {
+				genderVal = "F";
+			} else if (genderVal == "Others") {
+				genderVal = "O";
+			} else {
+				genderVal = "";
 			}
-			else {
+			that.rolesusers = that.getView().byId("idProjectIdmultirole").getSelectedKeys();
+			var obj = {
+				"username": Name,
+				"email": that.getView().byId("idProjectId8").getValue(),
+				"provider": "local",
+				"confirmed": true,
+				"blocked": false,
+				// "firstName": Name.split(" ")[0],
+				// "lastName": Name.split(" ")[1] ? Name.split(" ")[1] : "",
+				"firstName": that.getView().byId("idProjectId1").getValue(),
+				"lastName": that.getView().byId("idProjectIdln").getValue(),
+				"gender": genderVal,
+				//	"designation": that.getView().byId("idProjectId51").getValue(),
+				"designation": that.getView().byId("idProjectId51").getSelectedKey(),
+				"department": department.getSelectedKey() ? department.getSelectedKey() : "",
+				"emergencyContName": that.getView().byId("idProjectId11").getValue(),
+				"emergencyContPhone": that.getView().byId("idProjectId12").getValue(),
+				"phone": that.getView().byId("idProjectId7").getValue(),
+				"address": that.getView().byId("idProjectId18").getValue(),
+				"city": that.getView().byId("idProjectId23").getValue(),
+				"country": that.getView().byId("idProjectId22").getValue(),
+				"zipcode": that.getView().byId("idProjectId25").getValue() ? that.getView().byId("idProjectId25").getValue() : null,
+				//"password": "Vaspp@123",
+				"password": that.getView().byId("idProjectId").getValue(),
+				"appPermission": {
+					// "applicationid": "APP10001",
+					// "name": "Manage_Projects",
+					// "create": true,
+					// "read": true,
+					// "update": true,
+					// "delete": true
+				},
+				//"p_team_role_users":JSON.parse(that.rolesusers),
+				"p_team_role_users": that.rolesusers,
+				"rate_card": that.getView().byId("idProjectIdrc").getValue(),
+				"bankName": that.getView().byId("idProjectId13").getValue() ? that.getView().byId("idProjectId13").getValue() : null,
+				"IFCScode": that.getView().byId("idProjectId14").getValue() ? that.getView().byId("idProjectId14").getValue() : null,
+				"bankAccNo": that.getView().byId("idProjectId15").getValue() ? that.getView().byId("idProjectId15").getValue() : null,
+				"uan": that.getView().byId("idProjectId16").getValue() ? that.getView().byId("idProjectId16").getValue() : null,
+			}
+			if (that.isAdd == "Add") {
+				var baseUrl = "/deswork/api/auth/local/register";
+				var callMethod = "POST";
+
+			} else {
+				baseUrl = "/deswork/api/users/" + that.empid;
+				callMethod = "PUT";
+			}
+			var Err = this.ValidateCreateCust();
+			if (Err == 0) {
+				$.ajax({
+					url: baseUrl,
+					type: callMethod,
+					"headers": {
+						"content-type": "application/json"
+					},
+					data: JSON.stringify(obj),
+					dataType: "json",
+					success: function (res) {
+						if (res.error) {
+							MessageBox.error(res.error.message);
+						} else {
+							that.handleGetUser();
+						}
+
+					},
+					error: function (err) {
+						MessageBox.error(err.responseJSON.error.message);
+					}
+				});
+			} else {
 				this.getView().setBusy(false);
-				var text = "Mandatory Fields are Required";
+				var text = "Please fill the mandatory fields";
 				MessageBox.error(text);
 			}
 		},
@@ -135,9 +213,9 @@ sap.ui.define([
 				thisView.byId("idProjectId1").setValueState("None");
 				Err++;
 			}
-			if (thisView.byId("idProjectId7").getValue() === "") {
+			if (thisView.byId("idProjectId5").getSelectedKey() === "") {
 
-				thisView.byId("idProjectId7").setValueState("None");
+				thisView.byId("idProjectId5").setValueState("None");
 				Err++;
 
 			}
@@ -145,18 +223,18 @@ sap.ui.define([
 				thisView.byId("idProjectId8").setValueState("None");
 				Err++;
 			}
-			if (thisView.byId("idProjectId13").getValue() === "") {
-				thisView.byId("idProjectId13").setValueState("None");
-				Err++;
-			}
-			if (thisView.byId("idProjectId15").getValue() === "") {
-				thisView.byId("idProjectId15").setValueState("None");
-				Err++;
-			}
-			if (thisView.byId("idProjectId22").getValue() === "") {
-				thisView.byId("idProjectId22").setValueState("None");
-				Err++;
-			}
+			// if (thisView.byId("idProjectId13").getValue() === "") {
+			// 	thisView.byId("idProjectId13").setValueState("None");
+			// 	Err++;
+			// }
+			// if (thisView.byId("idProjectId15").getValue() === "") {
+			// 	thisView.byId("idProjectId15").setValueState("None");
+			// 	Err++;
+			// }
+			// if (thisView.byId("idProjectId22").getValue() === "") {
+			// 	thisView.byId("idProjectId22").setValueState("None");
+			// 	Err++;
+			// }
 
 			return Err;
 		},

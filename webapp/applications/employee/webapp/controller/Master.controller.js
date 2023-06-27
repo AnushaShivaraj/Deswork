@@ -19,8 +19,11 @@ sap.ui.define([
 			$.get("/deswork/api/users?populate=*",function(response){
 				response = JSON.parse(response);
 				var oModel = new sap.ui.model.json.JSONModel(response);
-				that.getView().setModel(oModel, "memployee");
-			}) 
+				that.getOwnerComponent().setModel(oModel, "memployee");
+				that.getOwnerComponent().getModel("memployee").updateBindings(true);
+				that.getProjectDetails(response); 
+			})
+			
 		},
 		onListItemPress: function (oEvent) {
 			// var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
@@ -30,8 +33,8 @@ sap.ui.define([
 			// this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: product });
 			var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
 			employeeID = oEvent.getSource().getSelectedItem().getBindingContext("memployee").getObject().id;
-		this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: employeeID });
-		this.getView().getModel("memployee").updateBindings(true);
+			this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: employeeID });
+			this.getView().getModel("memployee").updateBindings(true);
 		},
 		//SEARCH THE EMPLOYEE DETAILS USING NAME
 		onSearch: function (oEvent) {
@@ -66,5 +69,33 @@ sap.ui.define([
 		//	this.getOwnerComponent().getRouter().navTo("AddNewEmployee", { "AddCust": "Add", "layout": sNextLayout});
 			this.getOwnerComponent().getRouter().navTo("AddNewEmployee", { "AddCust": "Add", "layout": sNextLayout, "listindex": "a"});
 		},
+		getProjectDetails: function(data) {
+			var tasks = 0;
+			var that = this;
+			
+			for(var i = 0; i < data.length; i++) {
+				if(data[i].p_tasks.length > 0) {
+					for(var j = 0; j < data[i].p_tasks.length; j++) {
+						if(data[i].p_tasks[j].status === "In-Progress") {
+							tasks++;
+							//that.getOwnerComponent().setModel("memployee/availability", "No work alloted");
+						}	
+					}
+					 if (tasks === 0) {
+						var text = "Working on " + data[i].p_tasks.length + " task(s)";
+						data[i].availability = text;
+					} else {
+						var text = "Working on " + tasks + " task";
+						data[i].availability = text;
+					}
+				} else if(data[i].p_tasks.length = 0) {
+					data[i].availability = "100%";
+				} else {
+					data[i].availability = "100%";
+				}
+			}
+			that.getOwnerComponent().getModel("memployee").setData(data);
+			console.log(that.getOwnerComponent().getModel("memployee").getData());
+		}
 	});
 });

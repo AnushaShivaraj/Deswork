@@ -38,16 +38,16 @@
 				</headerToolbar>
 			
 				
-			<ObjectListItem id="_IDGenColumnListItem1" title="{memployee>firstName}" type="Navigation" >
+			<ObjectListItem id="_IDGenColumnListItem1" title="{memployee>firstName} {memployee>lastName}" type="Navigation" >
 			<firstStatus >
-			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{memployee>noofproject}" /> 
+			<ObjectStatus id="_IDGenObjectStatus1" title="Available" text="{memployee>availability}" />
+
 		    </firstStatus>
-			<ObjectAttribute id="_IDGenObjectAttribute2" title="ID" text="{memployee>id}" />
-			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{memployee>country}" />
-			<ObjectAttribute id="_IDGenObjectAttribute3" title="E-mail" text="{memployee>email}" />
+			<!-- <ObjectAttribute id="_IDGenObjectAttribute2" title="" text="{memployee>department}" /> -->
+			<ObjectAttribute id="_IDGenObjectAttribute1" title="" text="{memployee>designation}" />
+			<!-- <ObjectAttribute id="_IDGenObjectAttribute3" title="" text="{memployee>email}" /> -->
 					</ObjectListItem>
 			</List>
-		</f:content>
-	
+		</f:content>	
 	</f:DynamicPage>
 </mvc:View>

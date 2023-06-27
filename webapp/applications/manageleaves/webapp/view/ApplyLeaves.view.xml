@@ -14,11 +14,13 @@ xmlns:core="sap.ui.core">
 			<l:Grid id="LRS4_FLX_TOP" width="auto" defaultIndent="L4 M3" defaultSpan="L4 M6 S12" class="s4leaveTypeSelectorFlx">
 				<l:content>
 					<Select id="leaveTypeSelectId" change="onLeaveTypeSelectionChange" required="true" width="100%" >
-						<core:Item id="_IDGenItem1" key="Select" text="Select" />
-						<core:Item id="sick" key="Sick Paid Leave" text="Sick Leave"/>
-						<core:Item id="emergency" key="Emergency Leave" text="Emergency Leave"/>
-						<core:Item id="vacation" key="Vacation Leave" text="Vacation Leave"/>
-						<!-- <core:Item id="Planned" key="Planned Leave" text="Planned Leave"/> -->
+						<core:Item id="_IDGenItem1" key="Select" text="Select" />	
+						<core:Item id="casual" key="Casual Leave" text="Casual Leave"/>
+						<core:Item id="sick" key="Sick Leave" text="Sick Leave"/>
+						<core:Item id="maternity" key="Maternity Leave" text="Maternity Leave"/> 
+						<core:Item id="paternity" key="Paternity Leave" text="Paternity Leave"/>
+						<core:Item id="marriage" key="Marriage Leave" text="Marriage Leave"/>
+						<core:Item id="unpaid" key="Unpaid Leave" text="Unpaid Leave"/>
 					</Select>
 				</l:content>
 			</l:Grid>
@@ -65,7 +67,7 @@ xmlns:core="sap.ui.core">
 										<f:fields>
 											<l:Grid id="LRS4_NOTE" width="100%" defaultSpan="L12 M12 S12">
 												<l:content>
-													<Label id="_IDGenLabel1" text="Reason" required="true">
+													<Label id="_IDGenLabel1" text="Reason" required="false">
 														<layoutData>
 															<l:ResponsiveFlowLayoutData id="_IDGenResponsiveFlowLayoutData6" linebreak="true"></l:ResponsiveFlowLayoutData>
 														</layoutData>
@@ -80,19 +82,12 @@ xmlns:core="sap.ui.core">
 															<l:ResponsiveFlowLayoutData id="_IDGenResponsiveFlowLayoutData8" linebreak="true"></l:ResponsiveFlowLayoutData>
 														</layoutData>
 													</CheckBox>
-													<!-- <UploadCollection id="upldColAttach" change="collectAttachment" mode="SingleSelectMaster" maximumFilenameLength="55" maximumFileSize="10"
-														multiple="false" sameFilenameAllowed="true" instantUpload="false" showSeparators="All" fileDeleted="onFileDeleted"
-														filenameLengthExceed="onFilenameLengthExceed" fileSizeExceed="onFileSizeExceed" typeMissmatch="onTypeMissmatch"
-														uploadComplete="onUploadComplete" beforeUploadStarts="onBeforeUploadStarts" uploadButtonInvisible="false">
-														<layoutData>
-															<l:ResponsiveFlowLayoutData id="_IDGenResponsiveFlowLayoutData9" linebreak="true"></l:ResponsiveFlowLayoutData>
-														</layoutData>
-													</UploadCollection> -->
-														<upload:UploadSet id="upldColAttach" items="{path:'attachmentModel>/', templateShareable: false}" afterItemAdded="onChange" beforeItemRemoved="onFileDeleted" mode="None" noDataDescription="{i18n>no files Description}">
+													
+														<!-- <upload:UploadSet id="upldColAttach" items="{path:'attachmentModel>/', templateShareable: false}" afterItemAdded="onChange" beforeItemRemoved="onFileDeleted" mode="None" noDataDescription="{i18n>no files Description}">
                                     <upload:items>
 									<upload:UploadSetItem id="_IDGenUploadSetItem1" fileName="{attachmentModel>FileName}" url="{attachmentModel>FileContent}"/>
                                 </upload:items>
-								</upload:UploadSet>
+								</upload:UploadSet> -->
 														
 												</l:content>
 											</l:Grid>

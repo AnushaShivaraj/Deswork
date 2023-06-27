@@ -9,7 +9,7 @@
                 <snappedHeading>
                     <m:FlexBox id="_IDGenFlexBox1" wrap="Wrap" fitContainer="true" alignItems="Center">
                         <m:FlexBox id="_IDGenFlexBox2" wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
-                            <m:Title id="_IDGenTitle2" text="{mcustomer>/id}" wrapping="true" class="sapUiTinyMarginEnd" />
+                            <!-- <m:Title id="_IDGenTitle2" text="{mcustomer>/id}" wrapping="true" class="sapUiTinyMarginEnd" /> -->
                         </m:FlexBox>
                     </m:FlexBox>
                 </snappedHeading>
@@ -24,7 +24,7 @@
 
         <headerContent>
 
-        <m:ObjectHeader id="_IDGenObjectHeader1" class="objHeaderClass" title="{mcustomer>/id}">
+        <m:ObjectHeader id="_IDGenObjectHeader1" class="objHeaderClass" title="">
                 <m:statuses>
                     <m:ObjectStatus id="_IDGenObjectStatus1" title="Country" text="{mcustomer>/attributes/country}"  />
                     <m:ObjectStatus id="_IDGenObj1ectStatus1" title="Region" text="{mcustomer>/attributes/region}" />
@@ -107,9 +107,9 @@
                       
                             <m:Table id="_IDGenTable1" mode="SingleSelectMaster" itemPress="handleItemPress" items="{mcustomer>/attributes/p_projects/data}">
                                 <m:columns>
-                                 <m:Column id="idcolemn">
+                                 <!-- <m:Column id="idcolemn">
                                         <m:Text id="customeridtext" text="Project ID" />
-                                    </m:Column>
+                                    </m:Column> -->
                                     <m:Column id="_IDGenColumn1">
                                         <m:Text id="cdbh" text="Project Name" />
                                     </m:Column>
@@ -128,7 +128,7 @@
                                 </m:columns>
                                 <m:items>
                                     <m:ColumnListItem id="_IDGenColumnListItem1">
-                                     <m:ObjectIdentifier id="_IDGenObject10" text="{mcustomer>id}" />
+                                     <!-- <m:ObjectIdentifier id="_IDGenObject10" text="{mcustomer>id}" /> -->
                                         <m:ObjectIdentifier id="_IDGenObjectIdentifier1" text="{mcustomer>attributes/name}" />
                                         <m:ObjectIdentifier id="_IDGenObjectIdentifier11" text="{mcustomer>attributes/description}" />
                                         <m:ObjectIdentifier id="_IDGenObjectIdentifier21" text="{mcustomer>attributes/startDate}" />
@@ -142,7 +142,7 @@
                 </subSections>
             </ObjectPageSection>
 <!-- ATTACHMENTS-->
-            <ObjectPageSection id="_IDGenObjectPageSection31" title="Attachments" class="sapUiResponsiveContentPadding">
+            <!-- <ObjectPageSection id="_IDGenObjectPageSection31" title="Attachments" class="sapUiResponsiveContentPadding">
                 <subSections>
                     <ObjectPageSubSection id="_IDGenObjectPageSubSection31">
                         
@@ -157,7 +157,7 @@
                        
                     </ObjectPageSubSection>
                 </subSections>
-            </ObjectPageSection>
+            </ObjectPageSection> -->
         </sections>
         <!--Accept and reject buttons for leave request-->
         <footer>

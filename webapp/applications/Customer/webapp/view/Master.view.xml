@@ -38,11 +38,11 @@
 				
 					<ObjectListItem id="_IDGenColumnListItem1" title="{mcustomer>attributes/name}" type="Navigation" >
 			<firstStatus >
-			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{mcustomer>noofproject}"
+			<ObjectStatus id="_IDGenObjectStatus1" title="Projects" text="{mcustomer>attributes/p_projects/data/length}"
 				 />
 				 
 		    </firstStatus>
-			<ObjectAttribute id="_IDGenObjectAttribute2" title="ID" text="{mcustomer>id}" />
+			<!-- <ObjectAttribute id="_IDGenObjectAttribute2" title="ID" text="{mcustomer>id}" /> -->
 			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{mcustomer>attributes/country}" />
 					</ObjectListItem>
 			</List>

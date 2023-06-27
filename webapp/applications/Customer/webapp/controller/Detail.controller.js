@@ -7,7 +7,7 @@ sap.ui.define([
 	"use strict";
 	return Controller.extend("vaspp.Customer.controller.Detail", {
 		onInit: function () {
-			
+
 			var oExitButton = this.getView().byId("exitFullScreenBtn"),
 				oEnterButton = this.getView().byId("enterFullScreenBtn");
 
@@ -15,7 +15,7 @@ sap.ui.define([
 			this.oModel = this.getOwnerComponent().getModel();
 
 			this.oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
-			
+
 
 			[oExitButton, oEnterButton].forEach(function (oButton) {
 				oButton.addEventDelegate({
@@ -27,9 +27,9 @@ sap.ui.define([
 					}.bind(this)
 				});
 			}, this);
-		
+
 		},
-		
+
 		handleFullScreen: function () {
 			this.bFocusFullScreenButton = true;
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
@@ -44,88 +44,61 @@ sap.ui.define([
 			var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/closeColumn");
 			this.oRouter.navTo("master", { layout: sNextLayout });
 		},
-		
+
 
 		_onObjectMatched: function (oEvent) {
 			var that = this;
-			this.id = oEvent.getParameter("arguments").product
-			var options = {};
+			 that.delete=false;
+			var options={};
+			if (typeof oEvent == "number") {
+				this.id = oEvent;
+			  } else {
+				this.id = oEvent.getParameter("arguments").product;
+			  }	
+			  that.getCustomer(this.id);
+			 
+		},
+		getCustomer:function(){
+			var that=this;
+			if(this.delete){
+			var options={};
+			$.get('/deswork/api/p-customers/?populate=*', options, function (response) {
+				response = JSON.parse(response);
+				 var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getOwnerComponent().setModel(oModel, "mcustomer");
+			    that.getOwnerComponent().getModel("mcustomer").updateBindings("true");
+				MessageBox.success("Employee has been deleted");
+				that.handleClose();
+				});
+			}else{
+				var options={};
 			$.get('/deswork/api/p-customers/' + this.id + '?populate[0]=p_projects', options, function (response) {
 				console.log(response);
 				response = JSON.parse(response);
 				var oModel = new sap.ui.model.json.JSONModel(response.data);
 				that.getView().setModel(oModel, "mcustomer");
-				
-			});
-			
-			// this._product = oEvent.getParameter("arguments").product || this._product || "0";
-			// this.getView().bindElement({
-			// 	path: "/CustomerCollection/" + this._product,
-			// 	model: "mcustomer"
-			// });
-			// //attachment
-			// var attachmentModel = new sap.ui.model.json.JSONModel(this.getView().mElementBindingContexts.mcustomer.getObject().documents);
-			// this.getView().setModel(attachmentModel,"attachmentModel");
-			// this.getView().getModel("attachmentModel").updateBindings(true);
+				that.getOwnerComponent().getModel("mcustomer").updateBindings("true");
+				});
+			}
 		},
-//EDIT THE CUSTOMER DETAILS
+		
+		//EDIT THE CUSTOMER DETAILS
 		onEdit: function () {
 			var that = this;
-			
+
 			var sendVendordetails = new sap.ui.model.json.JSONModel(this.getView().getModel("mcustomer").getData());
 			this.getOwnerComponent().setModel(sendVendordetails, "custUpdateDetails");
-			// this.getView().getModel("appView").setProperty("/layout", "MidColumnFullScreen");
-			// this.getOwnerComponent().getRouter().navTo("AddNewCustomer", {
-			// 	AddCust: "Edit"
-			// });
+
 			this.getView().getModel().setProperty("/layout", "OneColumn");
 
 			var sNextLayout = this.getView().getModel().getProperty("/actionButtonsInfo/midColumn/closeColumn");
-			if(sNextLayout == null)
-			sNextLayout = "OneColumn"
-			this.getOwnerComponent().getRouter().navTo("AddNewCustomer", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this.id });
+			if (sNextLayout == null)
+				sNextLayout = "OneColumn"
+			this.getOwnerComponent().getRouter().navTo("AddNewCustomer", { "AddCust": "Edit", "layout": sNextLayout, "listindex": this.id });
 
-
-
-
-
-			//var that = this;
-			//this.getView().getModel().setProperty("/layout", "OneColumn");
-
-			//var sNextLayout = this.getView().getModel().getProperty("/actionButtonsInfo/midColumn/closeColumn");
-			//if(sNextLayout == null)
-			//sNextLayout = "OneColumn"
-			//this.getOwnerComponent().getRouter().navTo("AddNewCustomer", { "AddCust": "Edit", "layout": sNextLayout,"listindex":this.id });
 		},
-//DELETE THE CUSTOMER DETAILS
+		//DELETE THE CUSTOMER DETAILS
 		onDetailPageDelete: function (evt) {
-			// var that = this;
-			
-			// var oItems = evt.getSource().getBindingContext("mcustomer").getObject().customerName;
-			// var oData = that.getView().getModel("mcustomer").getData().CustomerCollection;
-			// MessageBox.confirm("Are you sure you want to Delete  ?", {
-			// 	actions: ["Yes", "No"],
-			// 	emphasizedAction: "Yes",
-			// 	onClose: function (oEvent) {
-			// 		if (oEvent == "Yes") {
-            //        for (var i = 0; i < oData.length; i++) {
-			// 				var products = oData[i];
-											
-			// 				if (products.customerName === oItems) {
-			// 					that.getView().getModel("mcustomer").getData().CustomerCollection.splice(i, 1)
-								
-			// 				}
-			// 			}
-			// 			that.getView().getModel("mcustomer").updateBindings(true);
-			// 			MessageBox.success("Customer details has been deleted");
-			// 			//NAVIGATE TO MASTER			
-			// 			var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-			// 			oRouter.navTo("master");
-
-			// 		}
-			// 	}
-			// }
-			// );
 			var that = this;
 			MessageBox.confirm("Are you sure you want to Delete  ?", {
 				actions: ["Yes", "No"],
@@ -141,9 +114,9 @@ sap.ui.define([
 								if (resv.error) {
 									MessageBox.error(resv.error.message)
 								}
-								else {
-									MessageBox.success("Customer has been deleted");
-									that.getView().getModel("mcustomer").updateBindings(true);
+								else {	
+									that.delete=true;
+									that.getCustomer();									
 								}
 							}
 
@@ -155,13 +128,13 @@ sap.ui.define([
 
 
 		},
-		
 
+       
 
 
 		//UPLOAD DOCUMENTS
 		onChange: function (oEvent) {
-			var that=this;
+			var that = this;
 			var oUploadCollection = oEvent.getSource();
 			var file = oEvent.getParameter("item").getFileObject();
 			that.fileName = oEvent.getParameter("item").getFileName();
@@ -221,7 +194,7 @@ sap.ui.define([
 					}
 				}
 
-				
+
 				MessageToast.show("Event uploadComplete triggered");
 			}.bind(this), 8000);
 		},

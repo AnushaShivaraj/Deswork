@@ -29,10 +29,10 @@
                             key="{title}"
                             hasExpander="true"
                             select="launchApp"
-                            visible="{'.isAppVisible'}"
+                            visible="{path: '', formatter: '.isMainAppVisible'}"
                         >
                             <tnt:items>
-                                <tnt:NavigationListItem id="_IDGenNavigationListItem2" text="{path:'title'}" key="{title}" select="launchApp" visible="{ '.isAppVisible'}" />
+                                <tnt:NavigationListItem id="_IDGenNavigationListItem2" text="{path:'title'}" key="{title}" select="launchApp" visible="{path: '', formatter: '.isAppVisible'}" />
                             </tnt:items>
                             
                         </tnt:NavigationListItem>

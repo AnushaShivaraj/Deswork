@@ -12,21 +12,19 @@ sap.ui.define([
 
 	return Controller.extend("vaspp.Customer.controller.Master", {
 		onInit: function () {
-			
 			var that = this;
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this.oRouter.getRoute("master").attachPatternMatched(function (oEvent) {
                 this.getView().byId("productsTable").removeSelections(true);
-                
              }, this);
 			this._bDescendingSort = false;
 			$.get("/deswork/api/p-customers?populate=*",function(response){
 				response = JSON.parse(response);
-				var oModel = new sap.ui.model.json.JSONModel(response.data);
-				that.getView().setModel(oModel, "mcustomer");
+				var oModel = new sap.ui.model.json.JSONModel(response.data);			
+				that.getOwnerComponent().setModel(oModel, "mcustomer");
+				that.getOwnerComponent().getModel("mcustomer").updateBindings(true);
+				//that.getOwnerComponent().getModel("mcustomers").updateBindings(true);
 			}) 
-			
-			
 		},
 
 		onListItemPress: function (oEvent) {
@@ -36,28 +34,10 @@ sap.ui.define([
 			this.getView().getModel("mcustomer").updateBindings(true);
 		},
 
-		// onListItemPress: function (oEvent) {
-		// 	var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
-		// 		productPath = oEvent.getSource().getSelectedItem().getBindingContext("mcustomer").getPath(),
-		// 		product = productPath.split("/").slice(-1).pop();
-
-		// 	this.oRouter.navTo("detail", {layout: oNextUIState.layout, product: product});
-		// },
+		
 		//SEARCH THE CUSTOMER DETAILS USING ID
 		onSearch: function (oEvent) {
-			// var oTableSearchState = [],
-			// 	sQuery = oEvent.getParameter("query");
-
-			// if (sQuery && sQuery.length > 0) {
-			// 	oTableSearchState = [new Filter("attributes.customer_information.data.attributes.customerInformation_name", FilterOperator.Contains, sQuery)];
-			// }
-
-			// this.getView().byId("productsTable").getBinding("items").filter(oTableSearchState, "Application");
-			// $.get("/deswork/api/customers?filters[username][$eq]=John&populate=*",function(response){
-			// 	response = JSON.parse(response);
-			// 	var oModel = new sap.ui.model.json.JSONModel(response.data);
-			// 	that.getView().setModel(oModel, "mcustomer");
-			// })
+			
 			var oTableSearchState = [],
 				//oTableidSearchState=[],
 				sQuery = oEvent.getParameter("query");

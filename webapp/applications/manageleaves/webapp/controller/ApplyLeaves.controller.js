@@ -12,14 +12,17 @@ sap.ui.define([
     function (Controller,JSONModel, MessageToast, MessageBox, UploadCollectionParameter) {
         "use strict";
         return Controller.extend("VASPP.manageleaves.controller.ApplyLeaves", {
+
             onInit: function () {
-            var applyLeaveThis=this;
-            applyLeaveThis.appliedDates = [];
-			applyLeaveThis.holidayDates = [];
-			applyLeaveThis.lastSelectedRangeDates = [];
-			applyLeaveThis.lastSelecetedDatesCount = 0; // Contains the count of successfully selected valid dates only
-			applyLeaveThis.calendar = applyLeaveThis.getView().byId("calSelectLeaveDates");
-          this.getOwnerComponent().getRouter().getRoute("RouteApplyLeaves").attachPatternMatched(this.onObjectMatched, this);
+                var that = this;
+                that.getUserDetails();
+                that.callBalanceLeave();
+                that.appliedDates = [];
+			    that.holidayDates = [];
+			    that.lastSelectedRangeDates = [];
+			    that.lastSelecetedDatesCount = 0; // Contains the count of successfully selected valid dates only
+			    that.calendar = that.getView().byId("calSelectLeaveDates");
+                that.getOwnerComponent().getRouter().getRoute("RouteApplyLeaves").attachPatternMatched(that.onObjectMatched, that);
             },
 
             onChange: function (oEvent) {
@@ -38,22 +41,18 @@ sap.ui.define([
                 reader.readAsDataURL(file);
             },
     
-    
             onStartUpload: function (oEvent) {
                 var oUploadCollection = this.byId("UploadCollection");
                 var oTextArea = this.byId("TextArea");
                 var cFiles = oUploadCollection.getItems().length;
-                var uploadInfo = cFiles + " file(s)";
-    
+                var uploadInfo = cFiles + " file(s)";  
                 if (cFiles > 0) {
-                    oUploadCollection.upload();
-    
+                    oUploadCollection.upload(); 
                     if (oTextArea.getValue().length === 0) {
                         uploadInfo = uploadInfo + " without notes";
                     } else {
                         uploadInfo = uploadInfo + " with notes";
-                    }
-    
+                    }   
                     MessageToast.show("Method Upload is called (" + uploadInfo + ")");
                     MessageBox.information("Uploaded " + uploadInfo);
                     oTextArea.setValue("");
@@ -88,10 +87,11 @@ sap.ui.define([
                     MessageToast.show("Event uploadComplete triggered");
                 }.bind(this), 8000);
             },
+
             handleDateSelection: function (evt) {
                 var applyLeaveThis=this;
-                var oCalendar = evt.getSource(),
-                    aSelectedDates = oCalendar.getSelectedDates();
+                var oCalendar = evt.getSource();
+                var aSelectedDates = oCalendar.getSelectedDates();
                 applyLeaveThis.calendar = oCalendar;
     
                 // If a new date is selected
@@ -481,139 +481,186 @@ sap.ui.define([
                 this.leaveRequestObject.attachments.push(Event.getParameter("files")[0]);
             },
 
-
             handleHistoryPress: function () {
                  sap.ui.core.UIComponent.getRouterFor(this).navTo("RouteAppliedLeaves");
-                },
-
+            },
 
             handlebalancePress : function () {
                  sap.ui.core.UIComponent.getRouterFor(this).navTo("RouteBalanceLeaves");
-                },
+            },
 
-    applyLeave: function (oEvent) {
-     var applyLeaveThis=this;
-    var that=this;
-
-    var data=this.getView().getModel().getData();
-    var type = applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey();
-   // var appliedOn = applyLeaveThis.calendar.getSelectedDates()[0].mProperties.startDate.toDateString();
-    var appliedOn = new Date().toDateString();
-    var datesSelected = applyLeaveThis.calendar.getSelectedDates();
-    // var start_date = applyLeaveThis.calendar.getSelectedDates();
-    var start_date = applyLeaveThis.calendar.getSelectedDates()[0].mProperties.startDate.toDateString();
-//    var aSelectedDates = applyLeaveThis.calendar.getSelectedDates();
-//    var start_date = aSelectedDates[aSelectedDates.length - 1].getStartDate();
-     var end_date = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length - 1].getStartDate().toDateString();
- // var days = applyLeaveThis.getDays(start_date, end_date);
-   var sd = applyLeaveThis.calendar.getSelectedDates()[0].getStartDate().getDate() ;
-   var ed = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length - 1].getStartDate().getDate();
- 
- data.appliedOn = appliedOn;
-    data.type = type;
-    data.start_date = start_date;
-   
-    data.end_date = end_date;
-   // this.days();
- //  data.days = days;
-    //   var startDate = start_date;
-    //  var endDate = end_date;
-    //  var diff = Math.abs(startDate - endDate);
-    //  var day = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  //  new Date(sd);
-
-// var sdt=new Date(sd);
-// var edt=new Date(ed);
-// var timeDiff = edt.getTime() - sdt.getTime();
-// var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
- var days = applyLeaveThis.calendar.getSelectedDates().length
- //  var days =  this.days.length;
-   data.days = days;
-    that.getView().getModel("Leaves").getData().applied_leaves.push(data);
-    
-           this.getView().getModel("Leaves").updateBindings(true);
-
+            applyLeave: function (oEvent) {
+                var applyLeaveThis=this;
+                var that=this;
+                var appliedOn, startDate, endDate;
+                var data=this.getView().getModel().getData();
+                var type = applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey();
+                var halfDay = applyLeaveThis.getView().byId("halfDayCheckBoxId").getProperty("selected");
+                var appliedOnObject = new Date();
+                var appliedOnYear = appliedOnObject.getFullYear();
+                var requestedBy = that.getView().getModel("userModel").getData().username;
+                var requestedById = that.getView().getModel("userModel").getData().id;
+                //JSON.parse
+                var datesSelected = applyLeaveThis.calendar.getSelectedDates();
+                var datesArr = that.getRandomDates(datesSelected);
+                var start_dateObject = applyLeaveThis.calendar.getSelectedDates()[0].mProperties.startDate;
+                var start_month = start_dateObject.getMonth() + 1;
+                if(start_month < 10) {
+                    start_month = "0" + start_month;
+                }
+                var start_date = start_dateObject.getDate();
+                if(start_date < 10) {
+                    start_date = "0" + start_date;
+                }
+                var start_year = start_dateObject.getFullYear();
+                startDate = start_date + "-" + start_month + "-" + start_year;
+                var end_dateObject = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length - 1].getStartDate();
+                var end_month = end_dateObject.getMonth() + 1;
+                if(end_month < 10) {
+                    end_month = "0" + end_month;
+                }
+                var end_date = end_dateObject.getDate();
+                if(end_date < 10) {
+                    end_date = "0" + end_date;
+                }
+                var end_year = end_dateObject.getFullYear();
+                endDate = end_date + "-" + end_month + "-" + end_year;
+                var sd = applyLeaveThis.calendar.getSelectedDates()[0].getStartDate().getDate() ;
+                var ed = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length - 1].getStartDate().getDate();
+                var days = applyLeaveThis.calendar.getSelectedDates().length
+                data.days = days;
+                that.getView().getModel("Leaves").getData().applied_leaves.push(data);
+                this.getView().getModel("Leaves").updateBindings(true);
                 if (applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length === 0) {
                     MessageToast.show("Please Select Date to Apply for leave");
                     return;
-                } else if (applyLeaveThis.verifyBalanceLeaves() === "error") {
-                    return; // Don't proceed if there are no enough balance leaves available
+                } else {
+                    var leaveBalanceLeft = that.getLeaveBalanceLeft(that.getView().getModel("userModel").getData().p_balance_leaves, appliedOnYear);
+                    //if (applyLeaveThis.verifyBalanceLeaves() === "error") {
+                        if (parseInt(leaveBalanceLeft) < parseInt(days)) {
+                            MessageToast.show("Insufficient Leave Balance(You have " + leaveBalanceLeft + " leave balance)");
+                            return; // Don't proceed if there are no enough balance leaves available
+                    } else {
+                        if(datesArr.length > 1) {
+                            var oPromises = [];
+                            for(var i = 0; i < datesArr.length; i++) {
+                                var result = {
+                                    "startDate": datesArr[i],
+                                    "endDate": datesArr[i],
+                                    "NoOfDays": applyLeaveThis.calendar.getSelectedDates().length,
+                                    "type": applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey(),
+                                    "status": "Requested",
+                                    "reason": applyLeaveThis.getView().byId("reasonId").getValue(),
+                                    "halfDay": halfDay,
+                                    "leave_balance": that.getLeaveBalanceLeft(),
+                                    "approvedBy": null,
+                                    "requestedBy": requestedBy,
+                                    "requestedById": requestedById
+                                };  
+                                oPromises.push(that.applyLeaveNow(result, "noreset"));
+                            }
+                            Promise.all(oPromises).then(function() {
+                                that.clearLeaveRequestControl();
+                            });
+                        } else {
+                            var result = {
+                                "startDate": startDate,
+                                "endDate": endDate,
+                                "NoOfDays": applyLeaveThis.calendar.getSelectedDates().length,
+                                "type": applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey(),
+                                "status": "Requested",
+                                "reason": applyLeaveThis.getView().byId("reasonId").getValue(),
+                                "halfDay": halfDay,
+                                "leave_balance": that.getLeaveBalanceLeft(),
+                                "approvedBy": null,
+                                "requestedBy": requestedBy,
+                                "requestedById": requestedById
+                            };
+                            that.applyLeaveNow(result, "reset");
+                        }    
+                    }  
+                }             
+            },
+
+            getRandomDates: function(data) {
+                var arr = [], startDate;
+                for(var i = 0; i < data.length; i++) {
+                    var date = data[i].getProperty("startDate").getDate();
+                    if(date < 10) {
+                        date = "0" + date;
+                    }
+                    var month = data[i].getProperty("startDate").getMonth();
+                    month = month + 1;
+                    if(month < 10) {
+                        month = "0" + month;
+                    }
+                    month = month.toString();
+                    var year = data[i].getProperty("startDate").getFullYear();
+                    startDate = date + "-" + month + "-" + year;
+                    arr.push(startDate);
                 }
+                return arr;
+            },
+            
+            getLeaveBalanceLeft: function(data, year) {
+                var data = this.getView().getModel("balanceleave").getData();
+                data = data[0].attributes.balanceLeaves;
+                return data;
+            },
 
-                //    var type = applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey();
-                //    var leaveReason = applyLeaveThis.getView().byId("reasonId").getValue();
-                //    var datesSelected = applyLeaveThis.calendar.getSelectedDates();
-                    
+            applyLeaveNow: function(result, reset) {
+                var that = this;
+                var updateUrl = '/deswork/api/p-leaves/';
+                $.ajax({
+                    url: updateUrl,
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }, data: JSON.stringify({
+                        "data": result
+                    }),
+                    success: function (response) {
+                        if(reset === "reset") {
+                            that.clearLeaveRequestControl();
+                        }
+                    },
+                    error: function (error) {
+                        MessageBox.success(error);
+                    }
+                });
+            },
 
-                function applyLeaveNow() {
-                    
-                    MessageBox.success("Leave Applied");
-                //    applyLeaveThis.getView().byId("reasonId").setValue("");
-                    applyLeaveThis.getView().byId("leaveTypeSelectId").setSelectedKey("Select");
-                    applyLeaveThis.getView().byId("calSelectLeaveDates").removeAllSelectedDates();
-					applyLeaveThis.getView().byId("halfDayCheckBoxId").setSelected(false);
-					applyLeaveThis.getView().byId("UploadCollection").removeAllItems();
-                } // End of applyLeaveNow function
-
-                
-
-                applyLeaveNow();
-
-         //   }
-        },
-        // days: function (start_date, end_date) {
-        //     var dt1 = new Date(start_date);
-        //     var dt2 = new Date(end_date);
-
-        //     return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
-        //         (1000 * 60 * 60 * 24));
-        // },
-        // days: function (start_date, end_date) {
-        //     var dt1 = start_date.getDateValue();
-        //     var dt2 = end_date.getDateValue();
-        //     return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
-        //           (1000 * 60 * 60 * 24));
-               
-                
-        // },
-//         days: function (start_date, end_date) {
-//             var startDate = this.getView().byId("DP-FromDate").getDateValue();
-// var endDate = this.getView().byId("DP-ToDate").getDateValue();  
-// var diff = Math.abs(startDate.getTime() - endDate.getTime());
-// var diffD = Math.ceil(diff / (1000 * 60 * 60 * 24));
-               
-                
-//         },
-        
-            // days: function (date1, date2) {
-            //     var dt1 = new Date(date1);
-            //     var dt2 = new Date(date2);
-    
-            //     return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
-            //         (1000 * 60 * 60 * 24));
-            // },
+            clearLeaveRequestControl: function() {
+                var that =this;
+                MessageBox.success("Leave Applied");
+                that.getView().byId("leaveTypeSelectId").setSelectedKey("Select");
+                that.getView().byId("reasonId").setValue(""),
+                that.getView().byId("calSelectLeaveDates").removeAllSelectedDates();
+                that.getView().byId("halfDayCheckBoxId").setSelected(false);
+                //that.getView().byId("UploadCollection").removeAllItems();
+            },
 
             verifyBalanceLeaves: function () {
-                var applyLeaveThis=this;
-                if (applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey() !== "Unpaid Leave") {
-                    var startDate = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[0].getStartDate();
-                    var endDate = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length - 1].getStartDate();
-               
+                    var applyLeaveThis=this;
+                    if (applyLeaveThis.getView().byId("leaveTypeSelectId").getSelectedKey() !== "Unpaid Leave") {
+                        var startDate = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[0].getStartDate();
+                        var endDate = applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates()[applyLeaveThis.byId("calSelectLeaveDates").getSelectedDates().length - 1].getStartDate();
                 
-                    // var applicableDatesCount = applyLeaveThis.getApplicableDates(startDate, endDate).length,
-                    //     balanceLeavesData = sap.ui.getCore().getModel("balanceLeavesModel").getData().length > 0 ? sap.ui.getCore().getModel("balanceLeavesModel").getData().length - 1 : 0,
-                    //     balanceLeavesCount = parseFloat(sap.ui.getCore().getModel("balanceLeavesModel").getData()[balanceLeavesData].balanceLeaves);
-                   // if (applicableDatesCount <= balanceLeavesCount) {
-                        return "ok";
-                  //  } else {
-                   //     MessageBox.error(applyLeaveThis.oBundle.getText("noEnoughBalanceLeavesErrorMsg", [balanceLeavesCount, applicableDatesCount]), {
-                   //         actions: MessageBox.Action.OK
-                  //      });
-                  //      return "error";
-                 //   }
-              //  } else {
-              //      return "ok";
-                }
+                    
+                        // var applicableDatesCount = applyLeaveThis.getApplicableDates(startDate, endDate).length,
+                        //     balanceLeavesData = sap.ui.getCore().getModel("balanceLeavesModel").getData().length > 0 ? sap.ui.getCore().getModel("balanceLeavesModel").getData().length - 1 : 0,
+                        //     balanceLeavesCount = parseFloat(sap.ui.getCore().getModel("balanceLeavesModel").getData()[balanceLeavesData].balanceLeaves);
+                    // if (applicableDatesCount <= balanceLeavesCount) {
+                            return "ok";
+                    //  } else {
+                    //     MessageBox.error(applyLeaveThis.oBundle.getText("noEnoughBalanceLeavesErrorMsg", [balanceLeavesCount, applicableDatesCount]), {
+                    //         actions: MessageBox.Action.OK
+                    //      });
+                    //      return "error";
+                    //   }
+                //  } else {
+                //      return "ok";
+                    }
             },
 
             getApplicableDates: function (argStartDate, argEndDate) {
@@ -669,12 +716,43 @@ sap.ui.define([
                     console.log("Please pass both the start date and end date arguments to the getApplicableDates function.")
                     return undefined;
                 }
-            }
-
+            },
             
-
-           
-
+            getUserDetails: function() {
+                var that = this;
+                var url = 'deswork/api/users/me?populate=*';
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        var oModel = new sap.ui.model.json.JSONModel(response);
+				        that.getView().setModel(oModel, "userModel");
+                        that.callBalanceLeave(response.id);
+                    }
+                });
+            },
+            callBalanceLeave: function (id) {
+                var that = this;
+                var date = new Date();
+                var currentYear = date.getFullYear();
+                var url = 'deswork/api/p-balance-leaves?populate=*&filters[year]][$eq]=';
+                url = url + currentYear + '&filters[userId][$eq]=' + id;
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        var oModel2 = new sap.ui.model.json.JSONModel(response.data);
+                        that.getView().setModel(oModel2, "balanceleave");
+                    }
+                });             
+            }
             });
     });
-

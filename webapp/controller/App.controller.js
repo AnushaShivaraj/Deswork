@@ -552,7 +552,7 @@ sap.ui.define([
 		goToHomePage: function () {
 			if (!this.byId("app").getSideExpanded()) {
 				this.byId("app").setSideExpanded(true);
-			//	this.byId("sideNavigationToggleButton").setTooltip(this.oResourceBundle.getText("collapseMenu"));
+				//	this.byId("sideNavigationToggleButton").setTooltip(this.oResourceBundle.getText("collapseMenu"));
 			}
 			if (this.byId("sideBarMenu").getItem().getItems().length) {
 				this.byId("sideBarMenu").setSelectedItem(this.byId("sideBarMenu").getItem().getItems()[0]);
@@ -617,6 +617,188 @@ sap.ui.define([
 				oRouter1.navTo("Targetmain");
 			}
 		},
+
+		isMainAppVisible: function (oMenuItem) {
+			if (oMenuItem) {
+				var userRole = this.getOwnerComponent().getModel("loggedOnUserModel").getData();
+				if (userRole.designation === "SuperAdmin") {
+					//return true;
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'ManageProjects') {
+						return true;
+					}
+					else if (oMenuItem.key == 'UsersManagement') {
+						return true;
+					}
+					else if (oMenuItem.key == 'LeavesManagement') {
+						return true;
+					}
+					// else if (oMenuItem.key == 'MyProjects') {
+					// 	return true;
+					// }
+					else if (oMenuItem.key == 'Timesheets') {
+						return true;
+					}
+				}
+
+				else if (userRole.designation === "IT") {
+					// anu changed
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'LeavesManagement') {
+						return true;
+					}
+					else if (oMenuItem.key == 'MyProjects') {
+						return true;
+					}
+					else if (oMenuItem.key == 'Timesheets') {
+						return true;
+					}
+				}
+				else if (userRole.designation === "HR") {
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'LeavesManagement') {
+						return true;
+					}
+					else if (oMenuItem.key == 'UsersManagement') {
+						return true;
+					}
+					else if (oMenuItem.key == 'Timesheets') {
+						return true;
+					}
+				}
+
+				else if (userRole.designation === "Manager") {
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'ManageProjects') {
+						return true;
+					}
+					else if (oMenuItem.key == 'UsersManagement') {
+						return true;
+					}
+					else if (oMenuItem.key == 'LeavesManagement') {
+						return true;
+					}
+					else if (oMenuItem.key == 'MyProjects') {
+						return true;
+					}
+					else if (oMenuItem.key == 'Timesheets') {
+						return true;
+					}
+				}
+			}
+			return false;
+
+		},
+		isAppVisible: function (oMenuItem) {
+			if (oMenuItem) {
+				var userRole = this.getOwnerComponent().getModel("loggedOnUserModel").getData();
+				if (userRole.designation === "SuperAdmin") {
+					//return true;
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'MyProfile') {
+						return true;
+					}
+					
+					else if (oMenuItem.key == 'dayleavetracking') {
+						return true;
+					}
+					else if (oMenuItem.key == 'Manage Employee') {
+						return true;
+					}
+					else if (oMenuItem.key == 'ManageCustomers') {
+						return true;
+					}
+					else if (oMenuItem.key == 'ApproveLeaveRequests') {
+						return true;
+					}
+					else if (oMenuItem.key == 'EmployeeTimesheets') {
+						return true;
+					}
+					else if (oMenuItem.key == 'publicholiday') {
+						return true;
+					}
+				} else if (userRole.designation === "IT") {
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'MyProfile') {
+						return true;
+					}
+					else if (oMenuItem.key == 'mypublicholidayslist') {
+						return true;
+					}
+					else if(oMenuItem.key == 'LeaveEntry'){						
+							return true;		
+					}
+					else if (oMenuItem.key == 'MyTimesheet') {
+						return true;
+					}
+				}
+				else if (userRole.designation === "HR") {
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'MyProfile') {
+						return true;
+					}
+					else if (oMenuItem.key == 'Manage Employee') {
+						return true;
+					}
+					else if (oMenuItem.key == 'LeaveEntry') {
+						return true;
+					}
+					else if (oMenuItem.key == 'dayleavetracking') {
+						return true;
+					}
+					else if (oMenuItem.key == 'ApproveLeaveRequests') {
+						return true;
+					}
+					else if (oMenuItem.key == 'publicholiday') {
+						return true;
+					}
+					else if (oMenuItem.key == 'EmployeeTimesheets') {
+						return true;
+					}
+					
+				}
+
+				else if (userRole.designation === "Manager") {
+					if (oMenuItem.key == 'ProjectStatisticalReport') {
+						return true;
+					}
+					else if (oMenuItem.key == 'MyProfile') {
+						return true;
+					}
+					else if (oMenuItem.key == 'Manage Employee') {
+						return true;
+					}
+					else if (oMenuItem.key == 'dayleavetracking') {
+						return true;
+					}
+					else if (oMenuItem.key == 'ApproveLeaveRequests') {
+						return true;
+					}
+					else if (oMenuItem.key == 'publicholiday') {
+						return true;
+					}
+					else if (oMenuItem.key == 'EmployeeTimesheets') {
+						return true;
+					}
+				}
+			}
+			return false;
+		},
+
 		onItemClose: function (oEvent) {
 			var oItem = oEvent.getSource(),
 				oList = oItem.getParent();
