@@ -214,19 +214,17 @@ sap.ui.define([
 				Err++;
 			}
 			if (thisView.byId("idProjectId5").getSelectedKey() === "") {
-
 				thisView.byId("idProjectId5").setValueState("None");
 				Err++;
-
 			}
 			if (thisView.byId("idProjectId8").getValue() === "") {
 				thisView.byId("idProjectId8").setValueState("None");
 				Err++;
 			}
-			// if (thisView.byId("idProjectId13").getValue() === "") {
-			// 	thisView.byId("idProjectId13").setValueState("None");
-			// 	Err++;
-			// }
+			if (thisView.byId("idProjectId3").getValue() === "") {
+				thisView.byId("idProjectId3").setValueState("None");
+				Err++;
+			}
 			// if (thisView.byId("idProjectId15").getValue() === "") {
 			// 	thisView.byId("idProjectId15").setValueState("None");
 			// 	Err++;

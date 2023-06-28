@@ -1,0 +1,60 @@
+<mvc:View displayBlock="true" 
+controllerName="VASPP.myProjects.controller.Master" height="100%" xmlns="sap.m" xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc">
+    <f:DynamicPage id="dynamicPageId" toggleHeaderOnTitleClick="false">
+        <!-- DynamicPage Title -->
+        <f:title>
+            <f:DynamicPageTitle id="_IDGenDynamicPageTitle1">
+                <f:heading>
+                    <Title id="_IDGenTitle1" text="My Projects" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- DynamicPage Content -->
+        <f:content>
+            <List id="productsTable" mode="SingleSelectMaster" itemPress="onListItemPress" items="{myproject>/}">
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar1">
+                        
+                        <SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>masterSearchTooltip}" liveChange="onSearch" search="onSearch" width="auto">
+                            <layoutData>
+                                <OverflowToolbarLayoutData minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow" />
+                            </layoutData>
+                        </SearchField>
+                        <ToolbarSpacer />
+                        <!-- <OverflowToolbarButton id="_IDGenOverflowToolbarButton1" icon="sap-icon://add" type="Transparent" press="onAddProjects" /> -->
+                        <Button id="sortButton" tooltip="{i18n>Sort}" press="onOpenViewSettings" icon="sap-icon://sort" type="Transparent" />
+                        <Button id="filterButton" press="onOpenViewSettings" icon="sap-icon://filter" type="Transparent" />
+                    </OverflowToolbar>
+                </headerToolbar>
+
+                
+                <!-- <ObjectListItem id="_IDGenColumn1" title="{myproject>attributes/name}" type="Navigation">
+                    <firstStatus>
+                        <ObjectStatus id="_IDGenObjectStatus1" title="" text="{path:'myproject>attributes/status'}" state="{ path: 'myproject>attributes/status', formatter: '.formatter.getStatus' }" />
+                    </firstStatus>
+                    <secondStatus>
+                        <ObjectStatus id="_IDGenObjectStatush" title="Priority" text="{path:'myproject>attributes/priority'}" state="{ path: 'myproject>attributes/priority', formatter: '.formatter.getPriority' }" />
+                    </secondStatus>
+                    <ObjectAttribute id="_IDGenObjectAttribute3" title="Project ID " text="{myproject>id}" />
+
+                    <ObjectAttribute id="_IDGenObjectAttribute1" title="From " text="{myproject>attributes/startDate}" />
+
+                    <ObjectAttribute id="_IDGenObjectAttribute2" title="To " text="{myproject>attributes/estimatedEndDate}" />
+                </ObjectListItem> -->
+                <ObjectListItem id="id25" title="{myproject>attributes/name}"
+                     number="{parts: ['myproject>attributes/estimatedEndDate'], formatter: '.formatter.getDueDate'}"
+						type="Navigation">
+						<firstStatus>
+							<ObjectStatus id="_IDGenObjectStatus1" text="{path:'myproject>attributes/status'}"
+								state="{ path: 'myproject>attributes/status', formatter: '.formatter.getStatus' }"/>
+						</firstStatus>
+						<attributes>
+							<ObjectAttribute id="_IDGenObjectAttribute1" text="{myproject>attributes/p_customer/data/attributes/name}"/>
+							<!-- x.data[0].attributes.p_project.data.attributes.name -->
+						</attributes>
+					</ObjectListItem>
+            </List>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>
