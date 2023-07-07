@@ -1,0 +1,48 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified"
+	xmlns:l="sap.ui.layout">
+	<Dialog title="{i18n>Task/MeetingDetails}" contentWidth="50%" class="sapUiSizeCompact">
+		<beginButton>
+		<!-- <Button id ="editApp" text="Edit"  press="handleAppointmentEditA"/> -->
+		<Button id ="editSaveApp" text="{i18n>Save}"  press="handleDialogEditSaveButtonA"/>
+		</beginButton>
+		<endButton>
+		<!-- <Button id ="editSaveApp" text="Save"  press="handleDialogEditSaveButtonA"/> -->
+			<Button text="{i18n>Cancel}" press="handleAppointmentCancel"/>
+		</endButton>
+			<customHeader>
+			<Bar>
+				<contentRight>
+				<Button id ="editApp" type="Reject" text="{i18n>Edit}"  press="handleAppointmentEditA"/>
+						<Button text="{i18n>Delete}" type="Reject" press="handleAppointmentDelete"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+		<VBox>
+			<f:SimpleForm layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false"
+				emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+				<f:content>
+					<core:Title text="{i18n>AppointmentInformation}"/>
+					<Label text="{i18n>Name}"/>
+					<!-- <Text text="{taskModel>/name}"></Text> -->
+					<Input value="{taskModel>/name}" editable="false"></Input>
+					<!--<core:Title text="" />-->
+					<Label text="{i18n>Description}"/>
+					<!-- <Text text="{taskModel>/description}"/> -->
+					<Input value="{taskModel>/description}" editable="false" ></Input>
+					<Label text="{i18n>StartDate}"/>
+					<DateTimePicker value="{taskModel>/startDate}" editable="false"  />
+					<!-- <Input value="{taskModel>/startDate}" editable="false" ></Input> -->
+					<Label text="{i18n>EndDate}"/>
+					<DateTimePicker value="{taskModel>/endDate}" editable="false"  />
+					<!-- <Input value="{taskModel>/endDate}" editable="false" ></Input> -->
+					<!-- <Label text="Meeting Invite"/>
+					<Input value="{/0/meetingLink}" editable="false" /> -->
+					<!-- <Link text="{/0/meetingLink}" href="{/0/meetingLink}" target="_blank"/> -->
+					<!-- <Button id="appointmentEditbutt" icon="sap-icon://edit" type="Transparent" press="onEditLink"/> -->
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		
+		
+	</Dialog>
+</core:FragmentDefinition>

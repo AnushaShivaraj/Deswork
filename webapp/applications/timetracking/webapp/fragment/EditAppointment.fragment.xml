@@ -1,0 +1,23 @@
+<core:FragmentDefinition xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns="sap.m">
+	<Dialog id="createDialog" title="Create Appointment">
+		<beginButton>
+			<Button text="{i18n>Save}" type="Emphasized" press="handleDialogEditSaveButton"/>
+		</beginButton>
+		<endButton>
+			<Button text="{i18n>Cancel}" press="handleDialogEditCancelButton"/>
+		</endButton>
+		<l:VerticalLayout class="sapUiContentPadding" width="100%">
+			<Label text="Title: " required="true"/>
+			<Select  forceSelection="false" width="100%" items="{mAppointDetails>/}" change="onSelectName">
+				<core:Item key="{mAppointDetails>id}" text="{mAppointDetails>attributes/name}"/>
+			</Select>
+			<Label text="Description " />
+			<Input />
+			<Label text="Startdate " required="true"/>
+			<DateTimePicker displayFormat="short" required="true" change="handleCreateChange"/>
+			<Label text="Enddate " required="true"/>
+			<DateTimePicker  displayFormat="short" required="true" change="handleCreateChange"/>
+			
+		</l:VerticalLayout>
+	</Dialog>
+</core:FragmentDefinition>
