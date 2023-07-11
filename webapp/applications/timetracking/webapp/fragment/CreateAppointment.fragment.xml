@@ -7,6 +7,7 @@
 			<Button text="{i18n>Cancel}" press="handleDialogCancelButton"/>
 		</endButton>
 		<l:VerticalLayout class="sapUiContentPadding" width="100%">
+<<<<<<< HEAD
 		<!-- <Label text="{i18n>Project Name}" required="true"/>
 		<Select  forceSelection="false" width="100%" items="{mAppointDetails>/}" change="onSelectName">
 				<core:Item key="{mAppointDetails>id}" text="{mAppointDetails>attributes/name}"/>
@@ -38,6 +39,16 @@
 			<DateTimePicker  displayFormat="short" required="true" change="handleCreateChange1"/>
 			<Label text="{i18n>Hours taken}" />
 			<Input editable="false"/>
+=======
+			<Label text="{i18n>Title}" required="true"/>
+			<Input />
+			<Label text="{i18n>Description}" />
+			<Input />
+			<Label text="{i18n>StartDate}" required="true"/>
+			<DateTimePicker displayFormat="short" required="true" change="handleCreateChange"/>
+			<Label text="{i18n>EndDate}" required="true"/>
+			<DateTimePicker  displayFormat="short" required="true" change="handleCreateChange"/>
+>>>>>>> 0703dc281f4d2dcb241cd8f623f62a818c39a1d8
 			
 		</l:VerticalLayout>
 	</Dialog>
