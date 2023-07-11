@@ -14,7 +14,7 @@ sap.ui.define([
 	Text) {
 	"use strict";
 	return Controller.extend("vaspp.userlogin.controller.App", {
-		//formatter: formatter,
+		
 
 		onInit: function () {
 			var that = this;
