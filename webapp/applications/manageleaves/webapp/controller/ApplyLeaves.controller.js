@@ -739,8 +739,9 @@ sap.ui.define([
                 var that = this;
                 var date = new Date();
                 var currentYear = date.getFullYear();
+                that.loginId = this.getOwnerComponent().getModel("loggedOnUserModel").getData().id;
                 var url = 'deswork/api/p-balance-leaves?populate=*&filters[year]][$eq]=';
-                url = url + currentYear + '&filters[userId][$eq]=' + id;
+                url = url + currentYear + '&filters[userId][$eq]=' + that.loginId ;
                 $.ajax({
                     url: url,
                     method: "GET",
