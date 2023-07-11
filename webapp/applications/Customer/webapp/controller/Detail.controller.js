@@ -48,40 +48,40 @@ sap.ui.define([
 
 		_onObjectMatched: function (oEvent) {
 			var that = this;
-			 that.delete=false;
-			var options={};
+			that.delete = false;
+			var options = {};
 			if (typeof oEvent == "number") {
 				this.id = oEvent;
-			  } else {
+			} else {
 				this.id = oEvent.getParameter("arguments").product;
-			  }	
-			  that.getCustomer(this.id);
-			 
+			}
+			that.getCustomer(this.id);
+
 		},
-		getCustomer:function(){
-			var that=this;
-			if(this.delete){
-			var options={};
-			$.get('/deswork/api/p-customers/?populate=*', options, function (response) {
-				response = JSON.parse(response);
-				 var oModel = new sap.ui.model.json.JSONModel(response.data);
-				that.getOwnerComponent().setModel(oModel, "mcustomer");
-			    that.getOwnerComponent().getModel("mcustomer").updateBindings("true");
-				MessageBox.success("Employee has been deleted");
-				that.handleClose();
+		getCustomer: function () {
+			var that = this;
+			if (this.delete) {
+				var options = {};
+				$.get('/deswork/api/p-customers/?populate=*', options, function (response) {
+					response = JSON.parse(response);
+					var oModel = new sap.ui.model.json.JSONModel(response.data);
+					that.getOwnerComponent().setModel(oModel, "mcustomer");
+					that.getOwnerComponent().getModel("mcustomer").updateBindings("true");
+					MessageBox.success("Employee has been deleted");
+					that.handleClose();
 				});
-			}else{
-				var options={};
-			$.get('/deswork/api/p-customers/' + this.id + '?populate[0]=p_projects', options, function (response) {
-				console.log(response);
-				response = JSON.parse(response);
-				var oModel = new sap.ui.model.json.JSONModel(response.data);
-				that.getView().setModel(oModel, "mcustomer");
-				that.getOwnerComponent().getModel("mcustomer").updateBindings("true");
+			} else {
+				var options = {};
+				$.get('/deswork/api/p-customers/' + this.id + '?populate[0]=p_projects', options, function (response) {
+					console.log(response);
+					response = JSON.parse(response);
+					var oModel = new sap.ui.model.json.JSONModel(response.data);
+					that.getView().setModel(oModel, "mcustomer");
+					that.getOwnerComponent().getModel("mcustomer").updateBindings("true");
 				});
 			}
 		},
-		
+
 		//EDIT THE CUSTOMER DETAILS
 		onEdit: function () {
 			var that = this;
@@ -114,9 +114,9 @@ sap.ui.define([
 								if (resv.error) {
 									MessageBox.error(resv.error.message)
 								}
-								else {	
-									that.delete=true;
-									that.getCustomer();									
+								else {
+									that.delete = true;
+									that.getCustomer();
 								}
 							}
 
@@ -129,7 +129,7 @@ sap.ui.define([
 
 		},
 
-       
+
 
 
 		//UPLOAD DOCUMENTS
@@ -202,7 +202,9 @@ sap.ui.define([
 		onSelectChange: function (oEvent) {
 			var oUploadCollection = this.byId("UploadCollection");
 			oUploadCollection.setShowSeparators(oEvent.getParameters().selectedItem.getProperty("key"));
-		}
+		},
+		
+	
 
 
 

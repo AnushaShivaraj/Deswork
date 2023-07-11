@@ -49,37 +49,12 @@ sap.ui.define([
 
 
 
-		// ON ADD PROJECTS
 
-		// projectsDetails: function (oEvent) {
-		// 	var that = this;
-		// 	//that.getView().setBusy(false);
-		// 	var loginId = this.getOwnerComponent().getModel("loggedOnUserModel").getData().id;
-		// 	$.ajax({
-		// 		url: "/deswork/api/p-project-teams?populate=*&filters[users_permissions_user][id]=" + loginId,
-		// 		type: "GET",
-
-		// 		success: function (res) {
-		// 			var response = JSON.parse(res);
-		// 			console.log(response);
-		// 			var theModel = new sap.ui.model.json.JSONModel(response.data);
-		// 			that.getView().setModel(theModel, "myproject");
-		// 			console.log(that.getView().getModel("myproject").getData());
-		// 		},
-		// 		error: function (res) {
-		// 			console.log(res);
-		// 		}
-		// 	});
-
-		// },
 		projectsDetails: function (oEvent) {
 			var that = this;
-			//that.getView().setBusy(false);
 			var loginId = this.getOwnerComponent().getModel("loggedOnUserModel").getData().id;
 			$.ajax({
-			//	url: "/deswork/api/p-project-teams?populate=*&filters[users_permissions_user][id]=" + loginId,
-			url: "/deswork/api/p-projects?populate=*&filters[users_permissions_users][id]=" + loginId,
-		//url: "/deswork/api/p-projects?populate[0]=p_customer&populate[1]=p_vendors&populate[2]=p_tasks.users_permissions_user&populate[3]=p_project_teams.users_permissions_users&populate[4]=p_milestones&populate[5]=users_permissions_users&filters[users_permissions_users][id]=" + loginId,
+				url: "/deswork/api/p-projects?populate=*&filters[users_permissions_users][id]=" + loginId,
 				type: "GET",
 
 				success: function (res) {
@@ -87,26 +62,6 @@ sap.ui.define([
 					console.log(response);
 					var theModel = new sap.ui.model.json.JSONModel(response.data);
 					that.getView().setModel(theModel, "myproject");
-					//console.log(that.getView().getModel("myproject").getData());
-					// var data = that.getView().getModel("myproject").getData();
-					// // 	for (var i = 0; userP > 0; i++) {
-					// // 		if (userP[i].attributes.p_project.data){
-
-					// // 		}
-					// // }
-					// var mprojects = that.getView().getModel("mprojects").getData();
-					// var sameProjectId = true; // Flag to track if all project IDs are the same
-					// //	var firstProjectId = data[0].attributes.p_project.data.id; // Assuming the project ID is stored in the 'projectId' property
-					// var MyData = [];
-					// for (var i = 0; i < data.length; i++) {
-					// 	for (var j = 0; j < mprojects.length; j++) {
-					// 		if (data[i].attributes.p_project.data.id === mprojects[j].id) {
-					// 			sameProjectId = false;
-					// 			break; // Exit the loop if a different project ID is found
-					// 		}
-					// 	}
-					// }
-
 
 				},
 				error: function (res) {

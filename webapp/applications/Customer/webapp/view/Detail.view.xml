@@ -107,10 +107,7 @@
                       
                             <m:Table id="_IDGenTable1" mode="SingleSelectMaster" itemPress="handleItemPress" items="{mcustomer>/attributes/p_projects/data}">
                                 <m:columns>
-                                 <!-- <m:Column id="idcolemn">
-                                        <m:Text id="customeridtext" text="Project ID" />
-                                    </m:Column> -->
-                                    <m:Column id="_IDGenColumn1">
+                                 <m:Column id="_IDGenColumn1">
                                         <m:Text id="cdbh" text="Project Name" />
                                     </m:Column>
                                     <m:Column id="_IDGenColumn11">

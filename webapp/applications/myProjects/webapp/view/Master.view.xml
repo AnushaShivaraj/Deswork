@@ -5,7 +5,7 @@ controllerName="VASPP.myProjects.controller.Master" height="100%" xmlns="sap.m" 
         <f:title>
             <f:DynamicPageTitle id="_IDGenDynamicPageTitle1">
                 <f:heading>
-                    <Title id="_IDGenTitle1" text="My Projects" />
+                    <Title id="_IDGenTitle1" text="{i18n>MYPROJECTS}" />
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>
@@ -29,19 +29,6 @@ controllerName="VASPP.myProjects.controller.Master" height="100%" xmlns="sap.m" 
                 </headerToolbar>
 
                 
-                <!-- <ObjectListItem id="_IDGenColumn1" title="{myproject>attributes/name}" type="Navigation">
-                    <firstStatus>
-                        <ObjectStatus id="_IDGenObjectStatus1" title="" text="{path:'myproject>attributes/status'}" state="{ path: 'myproject>attributes/status', formatter: '.formatter.getStatus' }" />
-                    </firstStatus>
-                    <secondStatus>
-                        <ObjectStatus id="_IDGenObjectStatush" title="Priority" text="{path:'myproject>attributes/priority'}" state="{ path: 'myproject>attributes/priority', formatter: '.formatter.getPriority' }" />
-                    </secondStatus>
-                    <ObjectAttribute id="_IDGenObjectAttribute3" title="Project ID " text="{myproject>id}" />
-
-                    <ObjectAttribute id="_IDGenObjectAttribute1" title="From " text="{myproject>attributes/startDate}" />
-
-                    <ObjectAttribute id="_IDGenObjectAttribute2" title="To " text="{myproject>attributes/estimatedEndDate}" />
-                </ObjectListItem> -->
                 <ObjectListItem id="id25" title="{myproject>attributes/name}"
                      number="{parts: ['myproject>attributes/estimatedEndDate'], formatter: '.formatter.getDueDate'}"
 						type="Navigation">
@@ -51,7 +38,6 @@ controllerName="VASPP.myProjects.controller.Master" height="100%" xmlns="sap.m" 
 						</firstStatus>
 						<attributes>
 							<ObjectAttribute id="_IDGenObjectAttribute1" text="{myproject>attributes/p_customer/data/attributes/name}"/>
-							<!-- x.data[0].attributes.p_project.data.attributes.name -->
 						</attributes>
 					</ObjectListItem>
             </List>

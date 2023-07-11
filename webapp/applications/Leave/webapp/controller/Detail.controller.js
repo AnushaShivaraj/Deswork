@@ -59,6 +59,8 @@ sap.ui.define([
 			$.get('/deswork/api/p-leaves/' + that.id + '?populate=*', options, function (response) {
 				response = JSON.parse(response);
 				var oModel = new sap.ui.model.json.JSONModel(response.data);
+				that.getBalanceLeavesData(response.data.attributes.requestedById);
+				that.getLeaveHistory(response.data.attributes.requestedById);
 				that.getView().setModel(oModel, "mleave");
 				mAdttachment = response.data.attributes.p_attachment.data;
 				var kModel = new sap.ui.model.json.JSONModel(mAdttachment);
@@ -115,11 +117,11 @@ sap.ui.define([
 				that.balanceLeaves = response.attributes.leave_balance;
 				response.attributes.approvedBy = that.approvedBy;
 			}
-			that.updateStatus(response.attributes, status);
+			that.updateStatus(response.attributes, status, response.id);
 		},
-		updateStatus: function (data, status) {
+		updateStatus: function (data, status, id) {
 			var that = this;
-			var updateUrl = '/deswork/api/p-leaves/' + that.id;
+			var updateUrl = '/deswork/api/p-leaves/' + id;
 			$.ajax({
 				url: updateUrl,
 				method: "PUT",
@@ -210,8 +212,6 @@ sap.ui.define([
 					var oModel = new sap.ui.model.json.JSONModel(response);
 					that.getView().setModel(oModel, "userModel");
 					that.approvedBy = response.username;
-					that.getBalanceLeavesData(response.id);
-					that.getLeaveHistory(response.id);
 				}
 			});
 		},

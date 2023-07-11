@@ -342,7 +342,6 @@ sap.ui.define(
   
         onEditProjects: function (oEvent) {
           var that = this;
-  
           var EditModel = that
             .getView()
             .getModel("mprojects")
@@ -472,6 +471,8 @@ sap.ui.define(
   
         onSaveProject: function (oEv) {
           var that = this;
+          var Err = this.ValidateEditProject();
+          if (Err == 0) {
           that.updatedProject = {
             name: this.oAddProjectDialog1
               .getContent()[0]
@@ -574,9 +575,61 @@ sap.ui.define(
               }
             },
           });
-  
+        }
+        else {
+          this.getView().setBusy(false);
+          var text = "Mandatory Fields are Required";
+          MessageBox.error(text);
+        }
         },
-  
+
+        // PROJECT EDITNG VALIDATION
+        
+        ValidateEditProject:function(){
+          var Err = 0;
+			var thisView = this.oAddProjectDialog1;
+			// thisView.getContent()[0].getItems()[0].getContent()[14].setValue("0");
+			if (thisView.getContent()[0].getItems()[0].getContent()[2].getValue() === "" || thisView.getContent()[0].getItems()[0].getContent()[2].getValue()== null) {
+			  Err++;
+			}
+			else {
+				thisView.getContent()[0].getItems()[0].getContent()[2].setValueState("None");
+			}
+			
+			if(thisView.getContent()[0].getItems()[0].getContent()[4].getValue() === "") {
+			   thisView.getContent()[0].getItems()[0].getContent()[4].setValueState("None");
+			 	Err++;
+			   }
+		   if (thisView.getContent()[0].getItems()[0].getContent()[6].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[6].setValueState("None");
+				Err++;
+			  }
+		   if (thisView.getContent()[0].getItems()[0].getContent()[8].getValue() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[8].setValueState("None");
+				Err++;
+			  } 
+		   if (thisView.getContent()[0].getItems()[0].getContent()[10].getValue() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[10].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[14].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[14].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[16].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[16].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[18].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[18].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[20].getValue() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[20].setValueState("None");
+				Err++;
+			  }
+			   return Err;
+        },
         closeProjectDialog: function () {
           this.oAddProjectDialog1.close();
         },
@@ -1110,7 +1163,6 @@ sap.ui.define(
         },
   
         addSubTaskDailog: function () {
-          // this.editTask = false;
           this.oAddSubTaskInfo.setModel(
             new sap.ui.model.json.JSONModel({}),
             "mSubTasks"
@@ -1119,9 +1171,8 @@ sap.ui.define(
         },
         onSaveSubTaskDialog: function (oEv) {
           var that = this;
-          // var taskStatus;
-          // var projectData = this.getView().getModel("mprojects").getData();
-          // that.frg = this.getView().getModel("mCsfDetails").getData()[this.taskPath]
+          var Err = this.ValidateAddSubTask();
+          if (Err == 0) {
           that.addCSFPayload = {
             "name": this.oAddSubTaskInfo
               .getContent()[0]
@@ -1177,7 +1228,49 @@ sap.ui.define(
               }
             })
   
+          }
+          else {
+            this.getView().setBusy(false);
+            var text = "Mandatory Fields are Required";
+            MessageBox.error(text);
+          }
   
+        },
+
+        //VALIDATING ADD SUB-TASK
+
+        ValidateAddSubTask:function(){
+          var Err = 0;
+          var thisView = this.oAddSubTaskInfo;
+          if (thisView.getContent()[2].getContent()[1].getSelectedKey() === "" || thisView.getContent()[2].getContent()[1].getSelectedKey()== null) {
+            Err++;
+          }
+          else {
+            thisView.getContent()[2].getContent()[1].setValueState("None");
+          }
+          
+          if(thisView.getContent()[2].getContent()[3].getValue() === "") {
+             thisView.getContent()[2].getContent()[3].setValueState("None");
+             Err++;
+             }
+          if(thisView.getContent()[2].getContent()[5].getValue() === "") {
+              thisView.getContent()[2].getContent()[5].setValueState("None");
+              Err++;
+              }
+           
+           if (thisView.getContent()[2].getContent()[7].getValue() === "") {
+            thisView.getContent()[2].getContent()[7].setValueState("None");
+            Err++;
+            } 
+          if (thisView.getContent()[2].getContent()[9].getValue() === "") {
+            thisView.getContent()[2].getContent()[9].setValueState("None");
+            Err++;
+            }
+          if (thisView.getContent()[2].getContent()[13].getSelectedKey() === "") {
+            thisView.getContent()[2].getContent()[13].setValueState("None");
+            Err++;
+            }
+             return Err;
         },
   
         deleteTaskDailog: function (evt) {
@@ -1527,6 +1620,7 @@ sap.ui.define(
         },
         handleAddTaskS: function () {
           var that = this;
+         
           var taskStatus;
           var projectData = this.getView().getModel("mprojects").getData();
           that.frg = this.getView().getModel("mCsfDetails").getData()[this.taskPath]
@@ -1548,16 +1642,26 @@ sap.ui.define(
           if (new Date(projectData.attributes.startDate) > new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[5].getValue())) {
             sap.m.MessageBox.error("Start date is less than Project start date");
           }
-          //  else if (new Date(projectData.attributes.startDate) < new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[5].getValue())) {
-          //     sap.m.MessageBox.error("Start date is greater than Project start date");
-          //   }
-          else if (new Date(projectData.attributes.estimatedEndDate) < new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[7].getValue())) {
-            sap.m.MessageBox.error("End date is greater than Project end date");
-          }
+           else if (new Date(projectData.attributes.startDate) < new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[5].getValue())) {
+              sap.m.MessageBox.error("Start date is greater than Project start date");
+            }
+          
+          // else if (new Date(projectData.attributes.estimatedEndDate) < new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[7].getValue())) {
+          //   sap.m.MessageBox.error("End date is greater than Project end date");
+          // }
+
+          // else if (new Date(projectData.attributes.estimatedEndDate) < new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[7].getValue())) {
+          //   sap.m.MessageBox.error("End date is greater than Project end date");
+          // } else if (projectData.attributes.actualEndDate !== null && new Date(projectData.attributes.actualEndDate) < new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[7].getValue())) {
+          //   sap.m.MessageBox.error("End date is greater than Actual end date");
+          // }
+          
           else if (new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[5].getValue()) > new Date(this.oAddSubTaskInfo.getContent()[1].getContent()[7].getValue())) {
             sap.m.MessageBox.error("Start date is greater than end date");
           }
           else if (this.oAddSubTaskInfo.getContent()[1].getVisible() == true) {
+          var Err = this.ValidateAddTask();
+          if (Err == 0) {
             $.post(
               "/deswork/api/p-tasks?populate=*",
               {
@@ -1581,10 +1685,16 @@ sap.ui.define(
               }
             )
           }
-  
+        
+        else {
+          this.getView().setBusy(false);
+          var text = "Mandatory Fields are Required";
+          MessageBox.error(text);
+        }} 
           else {
-  
             var that = this;
+            var Err = this.ValidateAddSubTask();
+          if (Err == 0){
             var taskdetails = this.oAddSubTaskInfo.getContent()[2].getContent()[1].getSelectedKey();
             $.ajax({
               url: "deswork/api/p-tasks/" + taskdetails + "?populate=*",
@@ -1673,6 +1783,45 @@ sap.ui.define(
                 })
             }
           }
+        
+        else {
+          this.getView().setBusy(false);
+          var text = "Mandatory Fields are Required";
+          MessageBox.error(text);
+        }
+        }  
+        },
+// VALIDATE ADD TASK 
+        ValidateAddTask:function(){
+          var Err = 0;
+          var thisView = this.oAddSubTaskInfo;
+          if (thisView.getContent()[1].getContent()[1].getValue() === "" || thisView.getContent()[1].getContent()[1].getValue()== null) {
+            Err++;
+          }
+          else {
+            thisView.getContent()[1].getContent()[1].setValueState("None");
+          }   
+          if(thisView.getContent()[1].getContent()[5].getValue() === "") {
+             thisView.getContent()[1].getContent()[5].setValueState("None");
+             Err++;
+             }
+           if (thisView.getContent()[1].getContent()[7].getValue() === "") {
+            thisView.getContent()[1].getContent()[7].setValueState("None");
+            Err++;
+            }
+           if (thisView.getContent()[1].getContent()[11].getSelectedKey() === "") {
+            thisView.getContent()[1].getContent()[11].setValueState("None");
+            Err++;
+            } 
+          if (thisView.getContent()[1].getContent()[13].getSelectedKey() === "") {
+            thisView.getContent()[1].getContent()[13].setValueState("None");
+            Err++;
+            }
+         if (thisView.getContent()[1].getContent()[15].getSelectedKey() === "") {
+              thisView.getContent()[1].getContent()[15].setValueState("None");
+              Err++;
+              }
+             return Err;
         },
         CLearSubInfosub: function () {
           var that = this;
@@ -1683,14 +1832,6 @@ sap.ui.define(
           this.oAddSubTaskInfo.getContent()[2].getContent()[9].setValue("");
           this.oAddSubTaskInfo.getContent()[2].getContent()[11].setValue("");
           this.oAddSubTaskInfo.getContent()[2].getContent()[13].setSelectedKey("");
-  
-          // this.oAddSubTaskInfo.getContent()[1].getContent()[13].setSelectedKey("");
-          // var that = this;
-          // this.oAddSubTaskInfo.getContent()[2].getContent()[1].setSelectedKey("");
-          // this.oAddSubTaskInfo.getContent()[2].getContent()[3].setValue("");
-          // this.oAddSubTaskInfo.getContent()[2].getContent()[5].setValue("");
-          // this.oAddSubTaskInfo.getContent()[2].getContent()[7].setValue("");
-          // this.oAddSubTaskInfo.getContent()[2].getContent()[9].setSelectedKey("");
         },
         CLearSubInfo: function () {
           var that = this;
@@ -1711,7 +1852,6 @@ sap.ui.define(
           this.oAddSubTaskInfo.getContent()[1].getContent()[7].setValue("");
           this.oAddSubTaskInfo.getContent()[1].getContent()[9].setSelectedKey("");
           this.oAddSubTaskInfo.getContent()[1].getContent()[11].setSelectedKey("");
-  
           this.oAddSubTaskInfo.getContent()[1].getContent()[13].setSelectedKey("");
         },
   
@@ -1722,31 +1862,24 @@ sap.ui.define(
           if (gettingText === 'EDIT TASK') {
             this.oEditSubTaskInfo.getContent()[1].setVisible(true);
             this.oEditSubTaskInfo.getContent()[2].setVisible(false);
-            // that.getView().byId('AddTasks').setVisible(true);
-            // that.getView().byId('AddSubTasks').setVisible(false);
-  
+
           } else {
             this.oEditSubTaskInfo.getContent()[1].setVisible(false);
-            this.oEditSubTaskInfo.getContent()[2].setVisible(true);
-            // that.getView().byId('AddTasks').setVisible(false);
-            // that.getView().byId('AddSubTasks').setVisible(true);
+            this.oEditSubTaskInfo.getContent()[2].setVisible(true); 
           }
         },
         handleEditAddTaskCancelS: function () {
           var that = this;
           this.oEditSubTaskInfo.close();
-          if (this.oEditSubTaskInfo.getContent()[1].getVisible() == true) {
-            // that.CLearSubInfoAdd()
+          if (this.oEditSubTaskInfo.getContent()[1].getVisible() == true) {   
             that.CLearSubInfoAddEdit();
           } else {
             that.CLearSubInfosubEdit();
-          }
-          //  this.CLearSubInfosub();
+          }  
         },
         editSubTaskDailog: function () {
           var that = this;
           this.oEditSubTaskInfo.open();
-          //  this.oAddSubTaskInfo.open();
         },
         Subcsf: function () {
           var that = this;
@@ -1770,6 +1903,7 @@ sap.ui.define(
             }
           });
         },
+
         csf: function () {
           var that = this;
           $.ajax({
@@ -1872,7 +2006,12 @@ sap.ui.define(
             noOfDays: that.oEditSubTaskInfo.getContent()[2].getContent()[11].getValue(),
             status: that.oEditSubTaskInfo.getContent()[2].getContent()[13].getSelectedKey(),
           }
+          // if (new Date(this.oEditSubTaskInfo.getContent()[2].getContent()[9].getValue()) < new Date(this.oEditSubTaskInfo.getContent()[2].getContent()[7].getValue())) {
+          //   sap.m.MessageBox.error("Start date is greater than end date");
+          // }
           if (this.oEditSubTaskInfo.getContent()[2].getVisible() == true) {
+            var Err = this.ValidateEditSubTask();
+            if (Err == 0) {
             $.ajax({
               url: "deswork/api/p-sub-tasks/" + that.Subid + "?populate=*",
               type: "PUT",
@@ -1896,6 +2035,11 @@ sap.ui.define(
                 }
               },
             })
+            }else {
+            this.getView().setBusy(false);
+            var text = "Mandatory Fields are Required";
+            MessageBox.error(text);
+          }
           }
           else {
             that.upEditTaskInfo = {
@@ -1908,6 +2052,8 @@ sap.ui.define(
               priority: that.oEditSubTaskInfo.getContent()[1].getContent()[15].getSelectedKey(),
               users_permissions_user: that.oEditSubTaskInfo.getContent()[1].getContent()[17].getSelectedKey(),
             }
+            var Err = this.ValidateEditTask();
+            if (Err == 0) {
             $.ajax({
               url: "deswork/api/p-tasks/" + that.Subid + "?populate=*",
               type: "PUT",
@@ -1934,8 +2080,84 @@ sap.ui.define(
                 }
               },
             })
+          }else {
+          this.getView().setBusy(false);
+          var text = "Mandatory Fields are Required";
+          MessageBox.error(text);
+        }
+        }
+      },
+      ValidateEditTask:function(){
+        var Err = 0;
+        var thisView = this.oEditSubTaskInfo;
+        if (thisView.getContent()[1].getContent()[1].getSelectedKey() === "" || thisView.getContent()[1].getContent()[1].getSelectedKey()== null) {
+          Err++;
+        }
+        else {
+          thisView.getContent()[1].getContent()[1].setValueState("None");
+        }
+        
+        if(thisView.getContent()[1].getContent()[5].getValue() === "") {
+           thisView.getContent()[1].getContent()[5].setValueState("None");
+           Err++;
+           }
+         if (thisView.getContent()[1].getContent()[7].getValue() === "") {
+          thisView.getContent()[1].getContent()[7].setValueState("None");
+          Err++;
           }
-        },
+          if (thisView.getContent()[1].getContent()[9].getValue() === "") {
+            thisView.getContent()[1].getContent()[9].setValueState("None");
+            Err++;
+            } 
+        if (thisView.getContent()[1].getContent()[13].getSelectedKey() === "") {
+          thisView.getContent()[1].getContent()[13].setValueState("None");
+          Err++;
+          }
+       if (thisView.getContent()[1].getContent()[15].getSelectedKey() === "") {
+            thisView.getContent()[1].getContent()[15].setValueState("None");
+            Err++;
+            }
+       if (thisView.getContent()[1].getContent()[17].getSelectedKey() === "") {
+              thisView.getContent()[1].getContent()[17].setValueState("None");
+              Err++;
+              }
+           return Err;
+      },
+      ValidateEditSubTask:function(){
+        var Err = 0;
+        var thisView = this.oEditSubTaskInfo;
+        if (thisView.getContent()[2].getContent()[1].getSelectedKey() === "" || thisView.getContent()[2].getContent()[1].getSelectedKey()== null) {
+          Err++;
+        }
+        else {
+          thisView.getContent()[2].getContent()[1].setValueState("None");
+        }
+        
+        if(thisView.getContent()[2].getContent()[3].getValue() === "") {
+           thisView.getContent()[2].getContent()[3].setValueState("None");
+           Err++;
+           }
+        if(thisView.getContent()[2].getContent()[5].getValue() === "") {
+            thisView.getContent()[2].getContent()[5].setValueState("None");
+            Err++;
+            }
+         
+         if (thisView.getContent()[2].getContent()[7].getValue() === "") {
+          thisView.getContent()[2].getContent()[7].setValueState("None");
+          Err++;
+          } 
+        if (thisView.getContent()[2].getContent()[9].getValue() === "") {
+          thisView.getContent()[2].getContent()[9].setValueState("None");
+          Err++;
+          }
+        if (thisView.getContent()[2].getContent()[13].getSelectedKey() === "") {
+          thisView.getContent()[2].getContent()[13].setValueState("None");
+          Err++;
+          }
+           return Err;
+    
+
+      },
         CLearSubInfosubEdit: function () {
           this.oEditSubTaskInfo.getContent()[2].getContent()[1].setSelectedKey("");
           this.oEditSubTaskInfo.getContent()[2].getContent()[3].setValue("");

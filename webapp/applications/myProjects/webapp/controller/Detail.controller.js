@@ -22,19 +22,9 @@ sap.ui.define(
     MessageToast
   ) {
     "use strict";
-
     return Controller.extend("VASPP.myProjects.controller.Detail", {
       formatter: formatter,
       onInit: function () {
-
-        // if (!this.oAddTaskInfo) {
-        //   this.oAddTaskInfo = sap.ui.xmlfragment(
-        //     "idFragmentT123",
-        //     "VASPP.myProjects.view.RegisteraddTask",
-        //     this
-        //   );
-        //   this.getView().addDependent(this.oAddTaskInfo);
-        // }
         if (!this.oAddTaskInfo) {
           this.oAddTaskInfo = sap.ui.xmlfragment(
             "idFragmentT123",
@@ -43,7 +33,6 @@ sap.ui.define(
           );
           this.getView().addDependent(this.oAddTaskInfo);
         }
-
         var oExitButton = this.getView().byId("exitFullScreenBtn"),
           oEnterButton = this.getView().byId("enterFullScreenBtn");
         this.oRouter = this.getOwnerComponent().getRouter();
@@ -62,11 +51,13 @@ sap.ui.define(
           });
         }, this);
       },
+
       handleFullScreen: function () {
         this.bFocusFullScreenButton = true;
         var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
         this.oRouter.navTo("detail", { layout: sNextLayout, product: this.id });
       },
+
       handleExitFullScreen: function () {
         this.bFocusFullScreenButton = true;
         var sNextLayout = this.oModel.getProperty("/actionButtonsInfo/midColumn/exitFullScreen");
@@ -111,7 +102,7 @@ sap.ui.define(
       subTasks: function () {
         var that = this;
         $.ajax({
-           url: "/deswork/api/p-sub-tasks?populate=*",
+          url: "/deswork/api/p-sub-tasks?populate=*",
           type: "GET",
           success: function (res) {
             var csrfDetails = JSON.parse(res);
@@ -198,6 +189,8 @@ sap.ui.define(
       },
       onSaveTaskDialog: function (oEv) {
         var that = this;
+        var Err = this.ValidateCreateCust();
+        if (Err == 0) {
         that.oAddTask = {
           extended_end_date: this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].getValue(),
           status: this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[9].getSelectedKey(),
@@ -230,7 +223,42 @@ sap.ui.define(
             }
           },
         })
-
+      }
+      else {
+        this.getView().setBusy(false);
+        var text = "Mandatory Fields are Required";
+        MessageBox.error(text);
+      }
+      },
+      ValidateCreateCust:function(){
+        var Err = 0;
+        if (this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].getSelectedKey() === "" || this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].getSelectedKey() == null) {
+          Err++;
+        }
+        else {
+          this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].setValueState("None");
+        }
+        if (this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[3].getValue() === "") {
+          this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[3].setValueState("None");
+          Err++;
+        }
+        if (this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].getValue() === "") {
+          this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].setValueState("None");
+          Err++;
+        }
+        if (this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].getValue() === "") {
+          this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].setValueState("None");
+          Err++;
+        }
+        if (this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[9].getSelectedKey() === "") {
+          this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[9].setValueState("None");
+          Err++;
+        }
+        if (this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[11].getValue() === "") {
+          this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[11].setValueState("None");
+          Err++;
+        }
+        return Err;
       },
       clearTask: function () {
         this.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].setSelectedKey();
@@ -258,27 +286,12 @@ sap.ui.define(
 
           success: function (res) {
             var response = JSON.parse(res);
-
             that.mcsrfLength = response.data.length;
             var cModel = new sap.ui.model.json.JSONModel(response.data);
             that.getView().setModel(cModel, "mCsfDetails");
-
             var taskData = that.getView().getModel("mCsfDetails").getData();
-            // for (var i = 0; taskData.length > length; i++) {
             var selected_id = that.getView().getModel("mCsfDetails").getData().id;
-
-
-            //     that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].setSelectedKey(that.getView().getModel("mCsfDetails").getData().attributes.name);
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[3].setValue(that.getView().getModel("mCsfDetails").getData().attributes.description);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].setValue(that.getView().getModel("mCsfDetails").getData().attributes.startDate);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].setValue(that.getView().getModel("mCsfDetails").getData().attributes.endDate);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[9].setValue(that.getView().getModel("mCsfDetails").getData().attributes.extended_end_date);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[11].setSelectedKey(that.getView().getModel("mCsfDetails").getData().attributes.status);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[13].setSelectedKey(that.getView().getModel("mCsfDetails").getData().attributes.priority);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[15].setValue(that.getView().getModel("mCsfDetails").getData().attributes.p_task_reason);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[17].setValue(that.getView().getModel("mCsfDetails").getData().attributes.users_permissions_user.data.attributes.firstName);
-
-            //   var programKey =  that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].getSelectedItem().getKey();
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].setEditable(true);
 
             $.ajax({
@@ -325,47 +338,12 @@ sap.ui.define(
             that.getView().setModel(cModel, "mCsfDetails");
 
             var taskData = that.getView().getModel("mCsfDetails").getData();
-            // for (var i = 0; taskData.length > length; i++) {
-            //  var selected_id = that.getView().getModel("mCsfDetails").getData().id;
-
-
-            //   
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[3].setValue(taskData.attributes.startDate);
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].setValue(taskData.attributes.endDate);
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].setValue(taskData.attributes.extended_end_date);
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[9].setSelectedKey(taskData.attributes.status);
             that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[11].setValue(taskData.attributes.p_task_reason);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].setValue(that.getView().getModel("mCsfDetails").getData().attributes.startDate);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].setValue(that.getView().getModel("mCsfDetails").getData().attributes.endDate);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[9].setValue(that.getView().getModel("mCsfDetails").getData().attributes.extended_end_date);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[11].setSelectedKey(that.getView().getModel("mCsfDetails").getData().attributes.status);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[13].setSelectedKey(that.getView().getModel("mCsfDetails").getData().attributes.priority);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[15].setValue(that.getView().getModel("mCsfDetails").getData().attributes.p_task_reason);
-            // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[17].setValue(that.getView().getModel("mCsfDetails").getData().attributes.users_permissions_user.data.attributes.firstName);
 
-            //   var programKey =  that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[1].getSelectedItem().getKey();
-            //   that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].setEditable(true);
-
-            // $.ajax({
-            //   url:
-            //     "/deswork/api/p-sub-tasks?populate=*&filters[p_task][id][$eq]=" +
-            //     selected_id,
-            //   type: "GET",
-            //   success: function (res) {
-            //     var csrfDetails = JSON.parse(res);
-            //     if (csrfDetails.error) {
-            //       MessageBox.error(
-            //         csrfDetails.error.message + "Something went wrong!"
-            //       );
-            //     } else {
-            //       var mmModel = new sap.ui.model.json.JSONModel(csrfDetails.data);
-            //       that.oAddTaskInfo.setModel(mmModel, "csfmodel");
-            //      // that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[7].setValue(that.getView().getModel("csfmodel").getData().attributes.startDate);
-            //     that.selectedSubtask = that.oAddTaskInfo.getContent()[0].getItems()[0].getContent()[5].getSelectedKey()
-            //      // that.oAddTaskInfo.getModel("csfmodel").getData()[0].attributes.startDate
-            //     }
-            //   },
-            // });
           },
           error: function (res) {
             console.log(res);

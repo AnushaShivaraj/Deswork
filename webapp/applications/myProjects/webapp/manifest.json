@@ -110,7 +110,7 @@
 			"i18n": {
 			  "type": "sap.ui.model.resource.ResourceModel",
 			  "settings": {
-				"bundleName": "VASPP.manageproject.i18n.i18n"
+				"bundleName": "VASPP.myProjects.i18n.i18n"
 			  				}
 					},
 			"mprod":{

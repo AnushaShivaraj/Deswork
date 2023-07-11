@@ -205,8 +205,8 @@
                         <m:Button id="_IDGenButton2" type="Transparent" text="" icon="sap-icon://edit" press="editSubTaskDailog"/>
                         <m:Button id="_IDGe1nBu1tton11" text="" type="Transparent" icon="sap-icon://add" press="addSubTaskDailog" />
                         <m:Button id="_IDGe1nBu1tton112" text="" type="Transparent" icon="sap-icon://delete" press="deleteTaskDailog" />
-                          <!-- <m:Button text="Approve Time Extension" id="quotationApproveId" type="Emphasized" visible="true" press="onApproveProjects" />
-                <m:Button text="Reject Time Extension" id="quotationRejectId" type="Emphasized" visible="true" press="OnRejectProjects" /> -->
+                          <m:Button text="Approve Time Extension" id="quotationApproveId" type="Emphasized" visible="true" press="onApproveProjects" />
+                <m:Button text="Reject Time Extension" id="quotationRejectId" type="Emphasized" visible="true" press="OnRejectProjects" />
                     </m:OverflowToolbar>
                 </x:extension>
                 

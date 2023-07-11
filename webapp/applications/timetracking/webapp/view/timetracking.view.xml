@@ -11,19 +11,21 @@
 			showWeekNumbers="true"
 			rows="{path: '/'}">
 			<toolbarContent>
-				<Title text="My Timesheet" titleStyle="H4" id="Titletimetracking"/>
+				<Title text="{i18n>MyTimesheet}" titleStyle="H4" id="Titletimetracking"/>
+				<Button id="_IDGenButton1" icon="sap-icon://add" press="handleAppointmentCreate" tooltip="Add"/>
+				
 			</toolbarContent>
 			<rows>
 				<PlanningCalendarRow id="PlanningCalendarRowtimetracking"
 					title="{firstName} {lastName}" text="{designation}"
-					appointments="{path : 'p_tasks', templateShareable: false}">
-					<customData>
+					appointments="{ path : 'p_appointments', templateShareable:false}">
+					<!-- <customData>
 						<core:CustomData key="emp-name" value="{username}" writeToDom="true"/>
-					</customData>
+					</customData> -->
 					<appointments>
 						<unified:CalendarAppointment id="CalendarAppointmenttimetracking"
 							startDate="{startDate}" endDate="{endDate}" title="{name}" text="{description}"
-							type="{= ${status} === 'Completed' ? 'Type06' : (${status} === 'New' ? 'Type02' : 'Type05') }">
+							type="Type02" tentative="false">
 						</unified:CalendarAppointment>
 					</appointments>
 				</PlanningCalendarRow>

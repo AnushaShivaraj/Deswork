@@ -42,7 +42,6 @@
 				 />
 				 
 		    </firstStatus>
-			<!-- <ObjectAttribute id="_IDGenObjectAttribute2" title="ID" text="{mcustomer>id}" /> -->
 			<ObjectAttribute id="_IDGenObjectAttribute1" title="Country" text="{mcustomer>attributes/country}" />
 					</ObjectListItem>
 			</List>

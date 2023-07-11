@@ -173,6 +173,7 @@ sap.ui.define([
 				}
 			});
 		},
+		
 		getUser: function (id) {
 			var that = this;
 			$.ajax({
