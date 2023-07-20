@@ -110,6 +110,7 @@ sap.ui.define([
 						var response = JSON.parse(res);
 						console.log(response);
 						var reslen = that.getView().getModel("mprojects").getData();
+						
 						for (var i = 0; i < reslen.length; i++) {
 							var status = reslen[i].attributes.status;
 							if (!status_counts[status]) {

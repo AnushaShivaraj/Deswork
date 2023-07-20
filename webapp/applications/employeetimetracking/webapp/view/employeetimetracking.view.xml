@@ -11,13 +11,13 @@
 			showWeekNumbers="true"
 			rows="{path: '/'}">
 			<toolbarContent>
-				<Title text="Employee Timesheets" titleStyle="H4" id="Titletimetracking"/>
+				<Title text="{i18n>EmployeeTimesheets}" titleStyle="H4" id="Titletimetracking"/>
 			</toolbarContent>
 			<rows>
 				<PlanningCalendarRow id="PlanningCalendarRowtimetracking"
 					title="{firstName} {lastName}"
 					text="{designation}"
-					appointments="{path : 'p_tasks', templateShareable: false}">
+					appointments="{path : 'p_appointments', templateShareable: false}">
 					<customData>
 						<core:CustomData key="emp-name" value="{username}" writeToDom="true"/>
 					</customData>

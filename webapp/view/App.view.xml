@@ -12,6 +12,7 @@
                 <ToolbarSpacer id="_IDGenToolbarSpacer1" />
                 <Image id="logo1" src="image/DesworkLogo.png" height="200%" class="glowOnHover" />
                 <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                  <Text id="text1" text="{loggedOnUserModel>/firstName} {loggedOnUserModel>/lastName}" />
                 <f:Avatar id="_IDGenAvatarde1" src="{loggedOnUserModel>/profilePhoto}" press="showUserDetails" displaySize="XS" backgroundColor="Random" class="sapUiTinyMarginEnd" />
             </tnt:ToolHeader>
         </tnt:header>

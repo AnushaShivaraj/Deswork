@@ -28,25 +28,16 @@ sap.ui.define([
 				})
 			}, this);
 			this._bDescendingSort = false;
-
 			//	that.projectsDetails();
 			that.getCustomerDetails();
-
-
-
-
 		},
 
 		onListItemPress: function (oEvent) {
-
 			var oNextUIState = this.getOwnerComponent().getHelper().getNextUIState(1),
-				projectID = oEvent.getSource().getSelectedItem().getBindingContext("mprojects").getObject().id;
+			projectID = oEvent.getSource().getSelectedItem().getBindingContext("mprojects").getObject().id;
 			this.oRouter.navTo("detail", { layout: oNextUIState.layout, product: projectID });
 			this.getView().getModel("mprojects").updateBindings(true);
 		},
-
-
-
 
 		// ON ADD PROJECTS
 
@@ -56,7 +47,6 @@ sap.ui.define([
 			$.ajax({
 				url: "/deswork/api/p-projects?populate[1]=p_customer",
 				type: "GET",
-
 				success: function (res) {
 					var response = JSON.parse(res);
 					console.log(response);
@@ -66,14 +56,13 @@ sap.ui.define([
 					});
 					var theModel = new sap.ui.model.json.JSONModel(response.data);
 					that.getView().setModel(theModel, "mproject");
-
-
+					that.getOwnerComponent().getModel("mproject").updateBindings("true");
+					
 				},
 				error: function (res) {
 					console.log(res);
 				}
 			});
-
 		},
 		getCustomerDetails: function () {
 			var that = this;
@@ -83,10 +72,8 @@ sap.ui.define([
 				success: function (res) {
 					var response = JSON.parse(res);
 					console.log(response);
-
 					var theModel = new sap.ui.model.json.JSONModel(response.data);
 					that.getView().setModel(theModel, "customerInfo");
-
 				},
 				error: function (res) {
 					console.log(res);
@@ -96,25 +83,22 @@ sap.ui.define([
 		},
 
 		onAddProjects: function (oEvent) {
-
 			if (!this.oAddProjectDialog) {
 				this.oAddProjectDialog = sap.ui.xmlfragment("idfrag", "VASPP.Projects.view.Register", this);
 				this.getView().addDependent(this.oAddProjectDialog);
 			}
 			this.oAddProjectDialog.setModel(new sap.ui.model.json.JSONModel({}), "mproject");
 			this.oAddProjectDialog.open();
-			this.oAddProjectDialog.getContent()[0].getItems()[0].getContent()[14].setValue("0");
-
 		},
-
 
 		closeProjectDialog: function () {
 			this.oAddProjectDialog.close();
 		},
 
-
 		onSaveProject: function (oEvent) {
 			var that = this;
+			var Err = this.ValidateAddProject();
+			if (Err == 0) {		
 			var settings = {
 				"url": "/deswork/api/p-projects?populate=*",
 				"method": "POST",
@@ -124,7 +108,6 @@ sap.ui.define([
 				},
 				"data": JSON.stringify({
 					"data": this.oAddProjectDialog.getModel("mproject").getData()
-
 				}),
 			};
 			$.ajax(settings).done(function (response) {
@@ -132,19 +115,65 @@ sap.ui.define([
 				if (response.error) {
 					MessageBox.error(response.error.message);
 				} else {
-					that.oAddProjectDialog.close();
-					that.oAddProjectDialog.getModel("mproject").updateBindings(true);
-					MessageBox.success("Project Added Successfully");
-					that.getView().getModel().refresh(true);
-					that.getView().getModel("mprojects").updateBindings(true);
-					that.getView().getModel("mprojects").refresh();
-					that.onListItemPress(response.data);
-					// that.oAddProjectDialog.close();
-					that.onInit();
+					that.oAddProjectDialog.close();	
+					this.getView().byId("productsTable").refresh();							
+					MessageBox.success("Project Added Successfully");																		
 				}
-
 			});
+      }
+      else {
+        this.getView().setBusy(false);
+        var text = "Mandatory Fields are Required";
+        MessageBox.error(text);
+      }	  
+		},
 
+
+		//VALIDATE ADD PROJECT
+
+		ValidateAddProject:function(){
+			var Err = 0;
+			var thisView = this.oAddProjectDialog;
+			// thisView.getContent()[0].getItems()[0].getContent()[14].setValue("0");
+			if (thisView.getContent()[0].getItems()[0].getContent()[2].getValue() === "" || thisView.getContent()[0].getItems()[0].getContent()[2].getValue()== null) {
+			  Err++;
+			}
+			else {
+				thisView.getContent()[0].getItems()[0].getContent()[2].setValueState("None");
+			}			
+			if(thisView.getContent()[0].getItems()[0].getContent()[4].getValue() === "") {
+			   thisView.getContent()[0].getItems()[0].getContent()[4].setValueState("None");
+			 	Err++;
+			   }
+		   if (thisView.getContent()[0].getItems()[0].getContent()[6].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[6].setValueState("None");
+				Err++;
+			  }
+		   if (thisView.getContent()[0].getItems()[0].getContent()[8].getValue() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[8].setValueState("None");
+				Err++;
+			  } 
+		   if (thisView.getContent()[0].getItems()[0].getContent()[10].getValue() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[10].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[14].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[14].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[16].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[16].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[18].getSelectedKey() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[18].setValueState("None");
+				Err++;
+			  }
+			if (thisView.getContent()[0].getItems()[0].getContent()[20].getValue() === "") {
+				thisView.getContent()[0].getItems()[0].getContent()[20].setValueState("None");
+				Err++;
+			  }
+			   return Err;
 		},
 
 		// SORT /FILTER
@@ -188,7 +217,6 @@ sap.ui.define([
 		},
 
 		filterforarchive: function (i) {
-
 			var sQuery = "";
 			if (i == 1) {
 				sQuery = "Archived";
@@ -234,7 +262,6 @@ sap.ui.define([
 				oTableSearchState = [new Filter("attributes/name", FilterOperator.Contains, sQuery)];
 			}
 			this.getView().byId("productsTable").getBinding("items").filter(oTableSearchState, "Application");
-
 		},
 	});
 });

@@ -23,7 +23,6 @@ sap.ui.define([
 				var oModel = new sap.ui.model.json.JSONModel(response.data);			
 				that.getOwnerComponent().setModel(oModel, "mcustomer");
 				that.getOwnerComponent().getModel("mcustomer").updateBindings(true);
-				//that.getOwnerComponent().getModel("mcustomers").updateBindings(true);
 			}) 
 		},
 
@@ -39,10 +38,8 @@ sap.ui.define([
 		onSearch: function (oEvent) {
 			
 			var oTableSearchState = [],
-				//oTableidSearchState=[],
 				sQuery = oEvent.getParameter("query");
 			if (sQuery && sQuery.length > 0) {
-				//oTableidSearchState = [new Filter("id", FilterOperator.Contains, sQuery)];
 				oTableSearchState = [new Filter("attributes/name", FilterOperator.Contains, sQuery)];
 			}
 			this.getView().byId("productsTable").getBinding("items").filter(oTableSearchState, "Application");

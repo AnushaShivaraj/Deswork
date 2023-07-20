@@ -207,37 +207,193 @@ sap.ui.define([
 		},
 		//CHECK DATA VALIDATION
 		ValidateCreateCust: function () {
-			var Err = 0;
-			var thisView = this.getView();
-			if (thisView.byId("idProjectId1").getValue() === "") {
-				thisView.byId("idProjectId1").setValueState("None");
-				Err++;
-			}
-			if (thisView.byId("idProjectId5").getSelectedKey() === "") {
 
-				thisView.byId("idProjectId5").setValueState("None");
-				Err++;
+            var Err = 0;
 
-			}
-			if (thisView.byId("idProjectId8").getValue() === "") {
-				thisView.byId("idProjectId8").setValueState("None");
-				Err++;
-			}
-			// if (thisView.byId("idProjectId13").getValue() === "") {
-			// 	thisView.byId("idProjectId13").setValueState("None");
-			// 	Err++;
-			// }
-			// if (thisView.byId("idProjectId15").getValue() === "") {
-			// 	thisView.byId("idProjectId15").setValueState("None");
-			// 	Err++;
-			// }
-			// if (thisView.byId("idProjectId22").getValue() === "") {
-			// 	thisView.byId("idProjectId22").setValueState("None");
-			// 	Err++;
-			// }
+            var thisView = this.getView();
 
-			return Err;
-		},
+            if (thisView.byId("idProjectId1").getValue() === "") {
+
+                thisView.byId("idProjectId1").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId5").getSelectedKey() === "") {
+
+
+
+
+                thisView.byId("idProjectId5").setValueState("None");
+
+                Err++;
+
+
+
+
+            }
+
+            if (thisView.byId("idProjectId3").getSelectedButton() === "") {
+
+                thisView.byId("idProjectId3").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId").getValue() === "") {
+
+                thisView.byId("idProjectId").setValueState("None");
+
+                Err++;
+
+            }
+
+           
+
+            if (thisView.byId("idProjectIdln").getValue() === "") {
+
+                thisView.byId("idProjectIdln").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId51").getSelectedKey() === "") {
+
+                thisView.byId("idProjectId51").setValueState("None");
+
+                Err++;
+
+            }
+
+            // if (thisView.byId("_IDGenItem1").getSelectedKey() === "") {
+
+            //  thisView.byId("_IDGenItem1").setValueState("None");
+
+            //  Err++;
+
+            // }
+
+            if (thisView.byId("idProjectId11").getValue() === "") {
+
+                thisView.byId("idProjectId11").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId12").getValue() === "") {
+
+                thisView.byId("idProjectId12").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId13").getValue() === "") {
+
+                thisView.byId("idProjectId13").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId14").getValue() === "") {
+
+                thisView.byId("idProjectId14").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId15").getValue() === "") {
+
+                thisView.byId("idProjectId15").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId16").getValue() === "") {
+
+                thisView.byId("idProjectId16").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId7").getValue() === "") {
+
+                thisView.byId("idProjectId7").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId8").getValue() === "") {
+
+                thisView.byId("idProjectId8").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId22").getValue() === "") {
+
+                thisView.byId("idProjectId22").setValueState("None");
+
+                Err++;
+
+            }
+
+            if (thisView.byId("idProjectId23").getValue() === "") {
+
+                thisView.byId("idProjectId23").setValueState("None");
+
+                Err++;
+
+            }
+
+
+
+
+
+
+            return Err;
+
+        },
+		// ValidateCreateCust: function () {
+		// 	var Err = 0;
+		// 	var thisView = this.getView();
+		// 	// if (thisView.byId("idProjectId1").getValue() === "") {
+		// 	// 	thisView.byId("idProjectId1").setValueState("None");
+		// 	// 	Err++;
+		// 	// }
+		// 	// if (thisView.byId("idProjectId5").getSelectedKey() === "") {
+		// 	// 	thisView.byId("idProjectId5").setValueState("None");
+		// 	// 	Err++;
+		// 	// }
+		// 	// if (thisView.byId("idProjectId8").getValue() === "") {
+		// 	// 	thisView.byId("idProjectId8").setValueState("None");
+		// 	// 	Err++;
+		// 	// }
+		// 	// if (thisView.byId("idProjectId3").getValue() === "") {
+		// 	// 	thisView.byId("idProjectId3").setValueState("None");
+		// 	// 	Err++;
+		// 	// }
+		// 	// if (thisView.byId("idProjectId15").getValue() === "") {
+		// 	// 	thisView.byId("idProjectId15").setValueState("None");
+		// 	// 	Err++;
+		// 	// }
+		// 	// if (thisView.byId("idProjectId22").getValue() === "") {
+		// 	// 	thisView.byId("idProjectId22").setValueState("None");
+		// 	// 	Err++;
+		// 	// }
+
+		// 	return Err;
+		// },
 
 		//CANCELING THE DATA GETTING ADDED OR UPDATED 
 		handleWizardCancel: function () {

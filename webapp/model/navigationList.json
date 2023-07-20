@@ -60,7 +60,7 @@
         "icon": "sap-icon://add-activity-2",
         "expanded": false,
         "key": "MyProjects",
-        "componentName": "VASPP.My_Projects",
+        "componentName": "VASPP.myProjects",
         "permittedRoles": [
             "manager",
             "technici"

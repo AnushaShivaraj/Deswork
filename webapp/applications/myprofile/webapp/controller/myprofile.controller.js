@@ -6,7 +6,6 @@ sap.ui.define([
     "sap/m/MessageBox",
     '../utils/formatter'
 ],
-
     /**
          * @param {typeof sap.ui.core.mvc.Controller} Controller
          */
